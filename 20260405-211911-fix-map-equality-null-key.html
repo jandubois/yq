@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deep Review: 20260405-211911-fix-map-equality-null-key</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <style>
+/* Deep Review — canonical stylesheet
+ * Inlined into each generated HTML file by the beautify-review skill.
+ * Edit this file to change the look of all future reviews.
+ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  color: #1f2937;
+  background: #f8f9fb;
+  margin: 0;
+  padding: 2rem 1rem;
+}
+main { max-width: 900px; margin: 0 auto; }
+h1 { font-size: 1.6rem; margin-bottom: 0.5rem; color: #111827; }
+h2 { font-size: 1.35rem; margin-top: 2.5rem; margin-bottom: 1rem; color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.4rem; }
+h3 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.8rem; }
+hr { border: none; border-top: 2px solid #e5e7eb; margin: 2rem 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace; font-size: 0.85em; background: #f3f4f6; padding: 0.15em 0.35em; border-radius: 4px; }
+
+/* Code blocks — override Prism defaults */
+pre { margin: 0 !important; border-radius: 0 0 8px 8px !important; }
+pre[class*="language-"] { font-size: 0.78rem; line-height: 1.3; }
+pre code { background: none; padding: 0; }
+
+/* Report metadata table */
+.meta-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+.meta-table td { padding: 0.35rem 0.6rem; border: 1px solid #e5e7eb; vertical-align: top; }
+.meta-table td:first-child { font-weight: 600; width: 140px; background: #f9fafb; white-space: nowrap; }
+
+/* Cards — every section and finding lives in a card */
+.card { border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 1.2rem; }
+.card-neutral { background: #f1f3f5; border: 1px solid #d5d9e0; }
+.card-critical { background: #ffeef0; border: 1px solid #f5c6cb; }
+.card-important { background: #fff0e0; border: 1px solid #f5d9a8; }
+.card-suggestion { background: #f0f6ff; border: 1px solid #c7d9f5; }
+.card-design { background: #f0faf4; border: 1px solid #b7e4c7; }
+
+/* Severity section headings ��� colored to match their cards */
+.section-critical { color: #9b1c1c; }
+.section-important { color: #92400e; }
+.section-suggestion { color: #1e40af; }
+.section-design { color: #065f46; }
+
+/* Agent attribution pills */
+.pill { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 0.15em 0.55em; border-radius: 999px; margin-right: 0.3em; vertical-align: middle; letter-spacing: 0.01em; }
+.pill-claude { background: #e9d5ff; color: #6b21a8; }
+.pill-codex { background: #d1fae5; color: #065f46; }
+.pill-gemini { background: #ffe4e6; color: #9f1239; }
+
+/* Finding titles */
+.finding-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.6rem; line-height: 1.4; }
+.finding-num { font-weight: 800; }
+
+/* Code file header — dark bar above each source code block.
+ * The filename is a GitHub permalink to the displayed line range.
+ * Text color is light gray (#adbac7) for the bar, green (#7ee787)
+ * for the hyperlink — matching GitHub's dark-mode file header. */
+.code-file-header { background: #2d333b; color: #adbac7; font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-size: 0.75rem; padding: 0.4rem 0.9rem; border-radius: 8px 8px 0 0; margin-top: 0.8rem; }
+.code-file-header a { color: #7ee787; }
+.code-file-header a:hover { text-decoration: underline; }
+
+/* Line numbers (CSS counters) and line highlighting */
+.code-line { display: block; }
+.code-line::before {
+  content: counter(line);
+  counter-increment: line;
+  display: inline-block;
+  width: 3em;
+  margin-right: 0.8em;
+  padding-right: 0.5em;
+  text-align: right;
+  color: #636e7b;
+  border-right: 1px solid #3d4556;
+  user-select: none;
+}
+.line-hl { background: rgba(255, 199, 0, 0.18); }
+
+/* Pilcrow anchor links — hidden until parent is hovered */
+.pilcrow { color: #d1d5db; text-decoration: none; font-weight: 400; margin-left: 0.4em; opacity: 0; transition: opacity 0.15s; }
+h2:hover .pilcrow, h3:hover .pilcrow, .finding-title:hover .pilcrow { opacity: 1; }
+.pilcrow:hover { color: #6b7280; text-decoration: none; }
+
+/* Fix label */
+.fix-label { font-weight: 700; }
+
+/* Agent retro summary table */
+.retro-table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.9rem; table-layout: fixed; }
+.retro-table th, .retro-table td { padding: 0.45rem 0.7rem; border: 1px solid #e5e7eb; text-align: left; }
+.retro-table th { background: #f3f4f6; font-weight: 600; }
+.retro-table tr:nth-child(even) { background: #f9fafb; }
+
+/* Lists and paragraphs inside cards */
+.card ul, .card ol { margin: 0.4rem 0; padding-left: 1.5rem; }
+.card li { margin-bottom: 0.3rem; }
+.card p { margin: 0.5rem 0; }
+.card p:first-child { margin-top: 0; }
+
+/* Verdict highlight in metadata table */
+.verdict { font-weight: 700; }
+
+/* GitHub reference tooltips — shown on hover for #N links */
+.gh-tooltip {
+  position: absolute;
+  background: #1f2328;
+  color: #e6edf3;
+  padding: 0.55em 0.75em;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  max-width: 380px;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.28);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.gh-tooltip-state {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15em 0.5em;
+  border-radius: 999px;
+  margin-right: 0.4em;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+.gh-state-open { background: #238636; color: #fff; }
+.gh-state-closed { background: #848d97; color: #fff; }
+.gh-state-merged { background: #8957e5; color: #fff; }
+.gh-tooltip-title { vertical-align: baseline; }
+
+/* Mobile */
+@media (max-width: 640px) {
+  body { padding: 1rem 0.5rem; }
+  .card { padding: 0.9rem 1rem; }
+  pre code { font-size: 0.72rem; }
+}
+  </style>
+</head>
+<body>
+  <main>
+
+<h1>Deep Review: 20260405-211911-fix-map-equality-null-key</h1>
+
+<table class="meta-table">
+  <tr><td>Date</td><td>2026-04-05 21:19</td></tr>
+  <tr><td>Repo</td><td><a href="https://github.com/mikefarah/yq">mikefarah/yq</a></td></tr>
+  <tr><td>Round</td><td>1</td></tr>
+  <tr><td>Author</td><td>Jan Dubois</td></tr>
+  <tr><td>Branch</td><td><code>fix-map-equality-null-key</code></td></tr>
+  <tr><td>Commits</td><td><a href="https://github.com/mikefarah/yq/commit/f7d884ae29efa2991db24c1127e2826d8940b7f6"><code>f7d884ae</code></a> Fix panic in recurseNodeObjectEqual when comparing maps with null keys</td></tr>
+  <tr><td>Reviewers</td><td><span class="pill pill-claude">Claude</span> Opus 4.6, <span class="pill pill-codex">Codex</span> GPT 5.4, <span class="pill pill-gemini">Gemini</span> 3.1 Pro</td></tr>
+  <tr><td>Verdict</td><td class="verdict">Merge with fixes — the one-line fix is correct, but the same bug persists in <code>containsObject</code></td></tr>
+  <tr><td>Wall-clock time</td><td>11 min 6 s</td></tr>
+</table>
+
+<hr>
+
+<h2 id="executive-summary">Executive Summary <a href="#executive-summary" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<p>This branch replaces <code>findInArray</code> with <code>findKeyInMap</code> in <code>recurseNodeObjectEqual</code>, fixing an out-of-bounds panic when comparing maps whose keys include null values. The fix is correct, minimal, and well tested. All three reviewers independently identified the same parallel bug in <code>containsObject</code>, which uses <code>findInArray</code> on a MappingNode with a <code>%2</code> guard that prevents the panic but produces false negatives.</p>
+</div>
+
+<hr>
+
+<h2 id="critical-issues" class="section-critical">Critical Issues <a href="#critical-issues" class="pilcrow">¶</a></h2>
+
+<div class="card card-critical">
+<p>None.</p>
+</div>
+
+<hr>
+
+<h2 id="important-issues" class="section-important">Important Issues <a href="#important-issues" class="pilcrow">¶</a></h2>
+
+<div class="card card-important">
+<div class="finding-title" id="I1">
+  <span class="finding-num">I1.</span> <code>containsObject</code> has the same <code>findInArray</code> bug (important, gap) <span class="pill pill-claude">Claude</span> <span class="pill pill-codex">Codex</span> <span class="pill pill-gemini">Gemini</span>
+  <a href="#I1" class="pilcrow">¶</a>
+</div>
+
+<p><code>containsObject</code> at <a href="https://github.com/mikefarah/yq/blob/f7d884ae29efa2991db24c1127e2826d8940b7f6/pkg/yqlib/operator_contains.go#L49">line 49</a> searches a MappingNode's <code>Content</code> array with <code>findInArray</code>, which iterates by 1 and can match a key against a <em>value</em> at an odd index. The <code>%2</code> guard at <a href="https://github.com/mikefarah/yq/blob/f7d884ae29efa2991db24c1127e2826d8940b7f6/pkg/yqlib/operator_contains.go#L51">line 51</a> prevents the out-of-bounds panic this branch fixes in <code>recurseNodeObjectEqual</code>, but it introduces false negatives: when a null key exists later in the map but a null <em>value</em> appears first, <code>findInArray</code> returns the value's odd index, the guard rejects it, and the function reports the key as missing.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/f7d884ae29efa2991db24c1127e2826d8940b7f6/pkg/yqlib/operator_contains.go#L44-L57">pkg/yqlib/operator_contains.go</a></div>
+<pre data-start="44" data-line="49,51,52"><code class="language-go">	}
+	for index := 0; index < len(rhs.Content); index = index + 2 {
+		rhsKey := rhs.Content[index]
+		rhsValue := rhs.Content[index+1]
+		log.Debugf("Looking for %v in the lhs", rhsKey.Value)
+		lhsKeyIndex := findInArray(lhs, rhsKey)
+		log.Debugf("index is %v", lhsKeyIndex)
+		if lhsKeyIndex < 0 || lhsKeyIndex%2 != 0 {
+			return false, nil
+		}
+		lhsValue := lhs.Content[lhsKeyIndex+1]
+		log.Debugf("lhsValue is %v", lhsValue.Value)
+
+		itemInArray, err := contains(lhsValue, rhsValue)</code></pre>
+
+<p>Codex verified this live: <code>printf '? 1\n: ~\n? ~\n: x\n' | yq 'contains({~: "x"})'</code> returns <code>false</code> even though the map contains <code>null: x</code>.</p>
+
+<p><code>git blame</code> confirms this code predates the current change (Mike Farah, 2021, commit <a href="https://github.com/mikefarah/yq/commit/2db8140d7"><code>2db8140d7</code></a>).</p>
+
+<p><span class="fix-label">Fix:</span> replace <code>findInArray</code> with <code>findKeyInMap</code> and remove the even-index guard.</p>
+
+<pre><code class="language-diff">-       lhsKeyIndex := findInArray(lhs, rhsKey)
++       lhsKeyIndex := findKeyInMap(lhs, rhsKey)
+        log.Debugf("index is %v", lhsKeyIndex)
+-       if lhsKeyIndex < 0 || lhsKeyIndex%2 != 0 {
++       if lhsKeyIndex < 0 {
+            return false, nil
+        }</code></pre>
+</div>
+
+<hr>
+
+<h2 id="suggestions" class="section-suggestion">Suggestions <a href="#suggestions" class="pilcrow">¶</a></h2>
+
+<div class="card card-suggestion">
+<p>None.</p>
+</div>
+
+<hr>
+
+<h2 id="design-observations" class="section-design">Design Observations <a href="#design-observations" class="pilcrow">¶</a></h2>
+
+<div class="card card-design">
+<h3>Concerns</h3>
+
+<p><strong>1. Map lookups lack a single, safe primitive</strong> (in-scope) <span class="pill pill-claude">Claude</span> <span class="pill pill-codex">Codex</span> <span class="pill pill-gemini">Gemini</span> — <code>findInArray</code> accepts any <code>*CandidateNode</code> without distinguishing sequences from maps. This makes it easy to use on a MappingNode by mistake, as both <code>recurseNodeObjectEqual</code> and <code>containsObject</code> demonstrate. Converting all map-key searches to <code>findKeyInMap</code> (or adding a type assertion to <code>findInArray</code>) would eliminate this class of bug rather than requiring each call site to remember the stride.</p>
+
+<h3>Strengths</h3>
+
+<ol>
+<li>The fix reuses the existing <code>findKeyInMap</code> function rather than introducing new abstractions.</li>
+<li>Both a low-level unit test (<code>TestRecurseNodeObjectEqual</code>) and an operator-level integration test (<code>. += .</code> with sequence keys) validate the fix from different angles.</li>
+</ol>
+</div>
+
+<hr>
+
+<h2 id="testing-assessment">Testing Assessment <a href="#testing-assessment" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<p>The new tests cover the reported crash well:</p>
+<ol>
+<li><a href="https://github.com/mikefarah/yq/blob/f7d884ae29efa2991db24c1127e2826d8940b7f6/pkg/yqlib/lib_test.go#L304-L320"><code>lib_test.go:304-320</code></a> — directly verifies <code>recurseNodeObjectEqual</code> returns <code>false</code> for maps with different key types (null vs int).</li>
+<li><a href="https://github.com/mikefarah/yq/blob/f7d884ae29efa2991db24c1127e2826d8940b7f6/pkg/yqlib/operator_add_test.go#L531-L541"><code>operator_add_test.go:531-541</code></a> — end-to-end regression test using the exact input shape from the OSS-Fuzz report.</li>
+</ol>
+<p>Untested scenarios (ranked by risk):</p>
+<ol>
+<li><code>contains</code> with null keys where a null value appears earlier in the map (exercises the <code>containsObject</code> parallel bug from <a href="#I1">I1</a>).</li>
+</ol>
+</div>
+
+<hr>
+
+<h2 id="documentation-assessment">Documentation Assessment <a href="#documentation-assessment" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<p>No updates needed. The regression test comments include the OSS-Fuzz issue link, which is appropriate documentation for a fuzz-discovered bug fix.</p>
+</div>
+
+<hr>
+
+<h2 id="commit-structure">Commit Structure <a href="#commit-structure" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<p>Single commit with a clear message stating what changed and why. The scope is tight: one bug fix with two regression tests.</p>
+</div>
+
+<hr>
+
+<h2 id="agent-performance-retro">Agent Performance Retro <a href="#agent-performance-retro" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+
+<h3><span class="pill pill-claude">Claude</span></h3>
+
+<p>Found <a href="#I1">I1</a> (<code>containsObject</code> gap), rated it Important. Provided a concrete false-negative example and traced the <code>%2</code> guard logic. Ran 4 <code>git blame</code> commands to confirm the code predates this change. Also grepped for all callers of <code>findInArray</code> and <code>findKeyInMap</code>, read <code>operator_omit.go</code> and <code>operator_add.go</code> to check for further instances, and ran the test suite to verify the new tests pass. Accurate, thorough, no false positives.</p>
+
+<h3><span class="pill pill-codex">Codex</span></h3>
+
+<p>Found <a href="#I1">I1</a>, also rated Important. Distinguished itself by <em>live-verifying</em> the bug: ran <code>printf '? 1\n: ~\n? ~\n: x\n' | go run ./yq.go 'contains({~: "x"})'</code> and confirmed the false-negative output. Also read <code>operator_subtract.go</code> and <code>operator_contains_test.go</code> to check for parallel patterns. Ran <code>git blame</code> and the test suite. No false positives.</p>
+
+<h3><span class="pill pill-gemini">Gemini</span></h3>
+
+<p>Found the same issue as C1 (Critical). Wrote test files in its worktree to verify the bug. Ran 1 <code>git blame</code> (expected — Gemini's Pro model quota limits blame calls). Also checked <code>operator_has.go</code> for related patterns. No false positives.</p>
+
+<p><strong>Tool call highlights:</strong></p>
+<ul>
+<li><strong>Claude</strong> — 4 <code>git blame</code> calls, systematic grep for <code>findInArray</code>/<code>findKeyInMap</code>/<code>recursiveNodeEqual</code>. Read 6 files beyond the 3 changed files.</li>
+<li><strong>Codex</strong> — 2 <code>git blame</code> calls, 4 <code>rg</code> searches. Uniquely ran <code>go run ./yq.go</code> to verify the bug produces wrong output live.</li>
+<li><strong>Gemini</strong> — 1 <code>git blame</code> call, 6 grep searches. Wrote 2 test files to verify the bug experimentally. Broader grep for <code>find</code> across the codebase.</li>
+</ul>
+
+<h3>Summary</h3>
+
+<table class="retro-table">
+<tr>
+  <th></th>
+  <th><span class="pill pill-claude">Claude</span> Opus 4.6</th>
+  <th><span class="pill pill-codex">Codex</span> GPT 5.4</th>
+  <th><span class="pill pill-gemini">Gemini</span> 3.1 Pro</th>
+</tr>
+<tr><td>Duration</td><td>151s</td><td>114s</td><td>140s</td></tr>
+<tr><td>Findings</td><td>0C 1I 0S</td><td>0C 1I 0S</td><td>0C 1I 0S</td></tr>
+<tr><td>Tool calls</td><td>20 (Read 10, Bash 7)</td><td>23 (exec_command 20)</td><td>19 (grep 6, shell 6)</td></tr>
+<tr><td>Design observations</td><td>2</td><td>3</td><td>2</td></tr>
+<tr><td>False positives</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>Unique insights</td><td>0</td><td>1 (live verification)</td><td>0</td></tr>
+<tr><td>Files reviewed</td><td>3/3</td><td>3/3</td><td>3/3</td></tr>
+<tr><td>Coverage misses</td><td>0</td><td>0</td><td>0</td></tr>
+</table>
+
+<p><strong>Downgraded:</strong> Gemini rated the <code>containsObject</code> finding as Critical; consolidated to Important. The <code>%2</code> guard prevents the panic — the bug produces false negatives, not crashes. A pre-existing gap with no reported user impact does not meet the Critical bar.</p>
+
+<p><strong>Reconciliation:</strong> Gemini P1 containsObject finding: critical → important <a href="#I1">I1</a>.</p>
+
+<p>All three agents converged on the same finding with zero false positives. Codex's live verification added the most value by confirming the false-negative behaviour with a concrete command. Claude's systematic blame and grep coverage was the most thorough for attribution. Gemini's experimental test-writing approach was creative but produced no additional findings.</p>
+
+</div>
+
+<hr>
+
+<h2 id="review-process-notes">Review Process Notes <a href="#review-process-notes" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<p>No skill improvements or repo context updates warranted. All three agents found the same finding independently — the prompt guided them well. The small diff size made complete coverage straightforward.</p>
+</div>
+
+  </main>
+  <script>window.Prism = window.Prism || {}; Prism.manual = true;</script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-go.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-diff.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+  <script>
+/* Deep Review — Prism initialization and line-number wrapping.
+ * Inlined into each generated HTML file by the beautify-review skill.
+ * Runs synchronously at the end of <body> — no event listeners.
+ *
+ * Prerequisite: a preceding <script> must set Prism.manual = true
+ * before the Prism core <script> loads.
+ */
+
+Prism.highlightAll();
+
+document.querySelectorAll('pre[data-start]').forEach(function(pre) {
+  var startLine = parseInt(pre.getAttribute('data-start'), 10) || 1;
+  var hlAttr = pre.getAttribute('data-line') || '';
+
+  /* Parse data-line into a Set of line numbers to highlight.
+   * Accepts comma-separated values: "75,76,77" or ranges: "75-84". */
+  var hlLines = new Set();
+  hlAttr.split(',').forEach(function(part) {
+    part = part.trim();
+    if (!part) return;
+    var m = part.match(/^(\d+)-(\d+)$/);
+    if (m) {
+      for (var i = parseInt(m[1], 10); i <= parseInt(m[2], 10); i++) hlLines.add(i);
+    } else {
+      hlLines.add(parseInt(part, 10));
+    }
+  });
+
+  var code = pre.querySelector('code');
+  if (!code) return;
+
+  var html = code.innerHTML;
+  var lines = html.split('\n');
+  /* Strip a trailing empty line that Prism sometimes leaves. */
+  if (lines.length > 0 && lines[lines.length - 1].trim() === '') lines.pop();
+
+  var wrapped = lines.map(function(line, idx) {
+    var lineNum = startLine + idx;
+    var cls = 'code-line' + (hlLines.has(lineNum) ? ' line-hl' : '');
+    return '<span class="' + cls + '">' + line + '</span>';
+  });
+
+  /* Join with '' (empty string) — NOT '\n'.
+   * Inside <pre>, newlines are literal whitespace. Since .code-line uses
+   * display: block, joining with '\n' produces double line spacing. */
+  code.innerHTML = wrapped.join('');
+  pre.style.counterReset = 'line ' + (startLine - 1);
+});
+
+/* GitHub reference tooltips — show title and state on hover for #N links.
+ * Links must have class="gh-ref" and data-title set by the generator. */
+document.querySelectorAll('a.gh-ref[data-title]').forEach(function(link) {
+  var tip = null;
+
+  link.addEventListener('mouseenter', function() {
+    if (tip) return;
+    tip = document.createElement('div');
+    tip.className = 'gh-tooltip';
+
+    var state = link.getAttribute('data-state') || '';
+    var type = link.getAttribute('data-type') || 'issue';
+    var label = state.charAt(0).toUpperCase() + state.slice(1).toLowerCase();
+
+    var pill = document.createElement('span');
+    pill.className = 'gh-tooltip-state gh-state-' + state;
+    pill.textContent = label + (type === 'pr' ? ' PR' : '');
+
+    var title = document.createElement('span');
+    title.className = 'gh-tooltip-title';
+    title.textContent = link.getAttribute('data-title');
+
+    tip.appendChild(pill);
+    tip.appendChild(title);
+    document.body.appendChild(tip);
+
+    var rect = link.getBoundingClientRect();
+    var tw = tip.offsetWidth;
+    var th = tip.offsetHeight;
+    var left = rect.left + window.scrollX;
+    var top = rect.top + window.scrollY - th - 8;
+
+    if (left + tw > window.innerWidth - 12) left = window.innerWidth - tw - 12;
+    if (left < 4) left = 4;
+    if (top < window.scrollY + 4) top = rect.bottom + window.scrollY + 8;
+
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+    tip.style.opacity = '1';
+  });
+
+  link.addEventListener('mouseleave', function() {
+    if (tip) { tip.remove(); tip = null; }
+  });
+});
+  </script>
+</body>
+</html>
