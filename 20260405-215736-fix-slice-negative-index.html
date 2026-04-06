@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deep Review: 20260405-215736-fix-slice-negative-index</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <style>
+/* Deep Review — canonical stylesheet
+ * Inlined into each generated HTML file by the beautify-review skill.
+ * Edit this file to change the look of all future reviews.
+ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  color: #1f2937;
+  background: #f8f9fb;
+  margin: 0;
+  padding: 2rem 1rem;
+}
+main { max-width: 900px; margin: 0 auto; }
+h1 { font-size: 1.6rem; margin-bottom: 0.5rem; color: #111827; }
+h2 { font-size: 1.35rem; margin-top: 2.5rem; margin-bottom: 1rem; color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.4rem; }
+h3 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.8rem; }
+hr { border: none; border-top: 2px solid #e5e7eb; margin: 2rem 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace; font-size: 0.85em; background: #f3f4f6; padding: 0.15em 0.35em; border-radius: 4px; }
+
+/* Code blocks — override Prism defaults */
+pre { margin: 0 !important; border-radius: 0 0 8px 8px !important; }
+pre[class*="language-"] { font-size: 0.78rem; line-height: 1.3; }
+pre code { background: none; padding: 0; }
+
+/* Report metadata table */
+.meta-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+.meta-table td { padding: 0.35rem 0.6rem; border: 1px solid #e5e7eb; vertical-align: top; }
+.meta-table td:first-child { font-weight: 600; width: 140px; background: #f9fafb; white-space: nowrap; }
+
+/* Cards — every section and finding lives in a card */
+.card { border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 1.2rem; }
+.card-neutral { background: #f1f3f5; border: 1px solid #d5d9e0; }
+.card-critical { background: #ffeef0; border: 1px solid #f5c6cb; }
+.card-important { background: #fff0e0; border: 1px solid #f5d9a8; }
+.card-suggestion { background: #f0f6ff; border: 1px solid #c7d9f5; }
+.card-design { background: #f0faf4; border: 1px solid #b7e4c7; }
+
+/* Severity section headings — colored to match their cards */
+.section-critical { color: #9b1c1c; }
+.section-important { color: #92400e; }
+.section-suggestion { color: #1e40af; }
+.section-design { color: #065f46; }
+
+/* Agent attribution pills */
+.pill { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 0.15em 0.55em; border-radius: 999px; margin-right: 0.3em; vertical-align: middle; letter-spacing: 0.01em; }
+.pill-claude { background: #e9d5ff; color: #6b21a8; }
+.pill-codex { background: #d1fae5; color: #065f46; }
+.pill-gemini { background: #ffe4e6; color: #9f1239; }
+
+/* Finding titles */
+.finding-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.6rem; line-height: 1.4; }
+.finding-num { font-weight: 800; }
+
+/* Code file header */
+.code-file-header { background: #2d333b; color: #adbac7; font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-size: 0.75rem; padding: 0.4rem 0.9rem; border-radius: 8px 8px 0 0; margin-top: 0.8rem; }
+.code-file-header a { color: #7ee787; }
+.code-file-header a:hover { text-decoration: underline; }
+
+/* Line numbers (CSS counters) and line highlighting */
+.code-line { display: block; }
+.code-line::before {
+  content: counter(line);
+  counter-increment: line;
+  display: inline-block;
+  width: 3em;
+  margin-right: 0.8em;
+  padding-right: 0.5em;
+  text-align: right;
+  color: #636e7b;
+  border-right: 1px solid #3d4556;
+  user-select: none;
+}
+.line-hl { background: rgba(255, 199, 0, 0.18); }
+
+/* Pilcrow anchor links */
+.pilcrow { color: #d1d5db; text-decoration: none; font-weight: 400; margin-left: 0.4em; opacity: 0; transition: opacity 0.15s; }
+h2:hover .pilcrow, h3:hover .pilcrow, .finding-title:hover .pilcrow { opacity: 1; }
+.pilcrow:hover { color: #6b7280; text-decoration: none; }
+
+/* Fix label */
+.fix-label { font-weight: 700; }
+
+/* Agent retro summary table */
+.retro-table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.9rem; table-layout: fixed; }
+.retro-table th, .retro-table td { padding: 0.45rem 0.7rem; border: 1px solid #e5e7eb; text-align: left; }
+.retro-table th { background: #f3f4f6; font-weight: 600; }
+.retro-table tr:nth-child(even) { background: #f9fafb; }
+
+/* Lists and paragraphs inside cards */
+.card ul, .card ol { margin: 0.4rem 0; padding-left: 1.5rem; }
+.card li { margin-bottom: 0.3rem; }
+.card p { margin: 0.5rem 0; }
+.card p:first-child { margin-top: 0; }
+
+/* Verdict highlight in metadata table */
+.verdict { font-weight: 700; }
+
+/* GitHub reference tooltips */
+.gh-tooltip {
+  position: absolute;
+  background: #1f2328;
+  color: #e6edf3;
+  padding: 0.55em 0.75em;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  max-width: 380px;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.28);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.gh-tooltip-state {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15em 0.5em;
+  border-radius: 999px;
+  margin-right: 0.4em;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+.gh-state-open { background: #238636; color: #fff; }
+.gh-state-closed { background: #848d97; color: #fff; }
+.gh-state-merged { background: #8957e5; color: #fff; }
+.gh-tooltip-title { vertical-align: baseline; }
+
+/* Mobile */
+@media (max-width: 640px) {
+  body { padding: 1rem 0.5rem; }
+  .card { padding: 0.9rem 1rem; }
+  pre code { font-size: 0.72rem; }
+}
+  </style>
+</head>
+<body>
+  <main>
+
+<h1>Deep Review: 20260405-215736-fix-slice-negative-index</h1>
+
+<table class="meta-table">
+<tr><td>Date</td><td>2026-04-05 21:57</td></tr>
+<tr><td>Repo</td><td><a href="https://github.com/mikefarah/yq">mikefarah/yq</a></td></tr>
+<tr><td>Round</td><td>1</td></tr>
+<tr><td>Author</td><td>Jan Dubois &lt;jan@jandubois.com&gt;</td></tr>
+<tr><td>Branch</td><td><code>fix-slice-negative-index</code></td></tr>
+<tr><td>Commits</td><td><a href="https://github.com/mikefarah/yq/commit/b18f62b09442d9710e1f01ef9e718e121cfab94f"><code>b18f62b0</code></a> Fix panic on negative slice indices that underflow after adjustment</td></tr>
+<tr><td>Reviewers</td><td><span class="pill pill-claude">Claude</span> Opus 4.6, <span class="pill pill-codex">Codex</span> GPT 5.4, <span class="pill pill-gemini">Gemini</span> 3.1 Pro</td></tr>
+<tr><td>Verdict</td><td><span class="verdict">Merge with fixes</span> — the fix is correct but the regression test does not trigger the original panic</td></tr>
+<tr><td>Wall-clock time</td><td>18 min 8 s</td></tr>
+</table>
+
+<hr>
+
+<h2 id="executive-summary">Executive Summary <a href="#executive-summary" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<p>This change clamps both slice index bounds to <code>[0, len(Content)]</code> after negative-to-positive adjustment, preventing the out-of-bounds panic reported by OSS-Fuzz. The clamping logic is correct and symmetric. The regression test, however, uses an expression (<code>.[0:-99999]</code>) that produces the same empty-sequence result with or without the fix — it never triggers the original panic, so it provides no protection against regression.</p>
+</div>
+
+<hr>
+
+<h3 id="critical-issues" class="section-critical">Critical Issues <a href="#critical-issues" class="pilcrow">¶</a></h3>
+
+<div class="card card-critical">
+<p>None.</p>
+</div>
+
+<hr>
+
+<h3 id="important-issues" class="section-important">Important Issues <a href="#important-issues" class="pilcrow">¶</a></h3>
+
+<div class="card card-important">
+<div class="finding-title" id="I1">
+  <span class="finding-num">I1.</span> Regression test does not exercise the original panic (important, gap) <span class="pill pill-claude">Claude</span> <span class="pill pill-codex">Codex</span> <span class="pill pill-gemini">Gemini</span>
+  <a href="#I1" class="pilcrow">¶</a>
+</div>
+
+<p>The expression <code>.[0:-99999]</code> only exercises second-index clamping (<a href="https://github.com/mikefarah/yq/blob/b18f62b09442d9710e1f01ef9e718e121cfab94f/pkg/yqlib/operator_slice.go#L54-L55">lines 54–55</a> of <code>operator_slice.go</code>). On unpatched code, <code>relativeSecondNumber</code> computes to <code>3 + (-99999) = -99996</code>, making the loop condition <code>0 &lt; -99996</code> false — the loop terminates immediately without any out-of-bounds access. The test produces the same empty sequence with or without the fix.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/b18f62b09442d9710e1f01ef9e718e121cfab94f/pkg/yqlib/operator_slice_test.go#L96-L112">pkg/yqlib/operator_slice_test.go</a></div>
+<pre data-start="96" data-line="101-112"><code class="language-go">		expression: `.[-11:-10]`,
+		expected: []string{
+			"D0, P[], (!!seq)::- cat1\n",
+		},
+	},
+	{
+		// Regression test for https://issues.oss-fuzz.com/issues/438776028
+		// Negative slice index that underflows after adjustment must not
+		// cause an out-of-bounds access.
+		skipDoc:    true,
+		document:   `[a, b, c]`,
+		expression: `.[0:-99999]`,
+		expected: []string{
+			"D0, P[], (!!seq)::[]\n",
+		},
+	},
+}</code></pre>
+
+<p>The reported panic requires a first-index underflow: <code>.[-99999:3]</code> computes <code>relativeFirstNumber = 3 + (-99999) = -99996</code>, then the loop accesses <code>lhsNode.Content[-99996]</code> at <a href="https://github.com/mikefarah/yq/blob/b18f62b09442d9710e1f01ef9e718e121cfab94f/pkg/yqlib/operator_slice.go#L65">line 65</a>, triggering the panic. Gemini verified this by running the expression against unpatched code.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/b18f62b09442d9710e1f01ef9e718e121cfab94f/pkg/yqlib/operator_slice.go#L60-L66">pkg/yqlib/operator_slice.go</a></div>
+<pre data-start="60" data-line="65"><code class="language-go">		log.Debugf("calculateIndicesToTraverse: slice from %v to %v", relativeFirstNumber, relativeSecondNumber)
+
+		var newResults []*CandidateNode
+		for i := relativeFirstNumber; i &lt; relativeSecondNumber; i++ {
+			newResults = append(newResults, lhsNode.Content[i])
+		}
+
+</code></pre>
+
+<p>The fix adds first-index clamping at <a href="https://github.com/mikefarah/yq/blob/b18f62b09442d9710e1f01ef9e718e121cfab94f/pkg/yqlib/operator_slice.go#L39-L43">lines 39–43</a> that has no test coverage.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/b18f62b09442d9710e1f01ef9e718e121cfab94f/pkg/yqlib/operator_slice.go#L35-L43">pkg/yqlib/operator_slice.go</a></div>
+<pre data-start="35" data-line="39-43"><code class="language-go">		relativeFirstNumber := firstNumber
+		if relativeFirstNumber &lt; 0 {
+			relativeFirstNumber = len(lhsNode.Content) + firstNumber
+		}
+		if relativeFirstNumber &lt; 0 {
+			relativeFirstNumber = 0
+		} else if relativeFirstNumber &gt; len(lhsNode.Content) {
+			relativeFirstNumber = len(lhsNode.Content)
+		}
+</code></pre>
+
+<p><span class="fix-label">Fix:</span> add tests that exercise first-index underflow (which panics without the fix) and ideally both-index underflow:</p>
+
+<pre><code class="language-diff"> 	{
+ 		skipDoc:    true,
+ 		document:   `[a, b, c]`,
+ 		expression: `.[0:-99999]`,
+ 		expected: []string{
+ 			"D0, P[], (!!seq)::[]\n",
+ 		},
+ 	},
++	{
++		skipDoc:    true,
++		document:   `[a, b, c]`,
++		expression: `.[-99999:3]`,
++		expected: []string{
++			"D0, P[], (!!seq)::- a\n- b\n- c\n",
++		},
++	},
++	{
++		skipDoc:    true,
++		document:   `[a, b, c]`,
++		expression: `.[-99999:-99998]`,
++		expected: []string{
++			"D0, P[], (!!seq)::[]\n",
++		},
++	},</code></pre>
+
+</div>
+
+<hr>
+
+<h3 id="suggestions" class="section-suggestion">Suggestions <a href="#suggestions" class="pilcrow">¶</a></h3>
+
+<div class="card card-suggestion">
+<div class="finding-title" id="S1">
+  <span class="finding-num">S1.</span> Extract shared clamping logic into a helper (suggestion, enhancement) <span class="pill pill-claude">Claude</span> <span class="pill pill-gemini">Gemini</span>
+  <a href="#S1" class="pilcrow">¶</a>
+</div>
+
+<p>The same negative-adjustment-then-clamp pattern appears twice, once per index. A helper would remove duplication and make the intent self-documenting.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/b18f62b09442d9710e1f01ef9e718e121cfab94f/pkg/yqlib/operator_slice.go#L35-L58">pkg/yqlib/operator_slice.go</a></div>
+<pre data-start="35" data-line="35-43,50-58"><code class="language-go">		relativeFirstNumber := firstNumber
+		if relativeFirstNumber &lt; 0 {
+			relativeFirstNumber = len(lhsNode.Content) + firstNumber
+		}
+		if relativeFirstNumber &lt; 0 {
+			relativeFirstNumber = 0
+		} else if relativeFirstNumber &gt; len(lhsNode.Content) {
+			relativeFirstNumber = len(lhsNode.Content)
+		}
+
+		secondNumber, err := getSliceNumber(d, context, lhsNode, expressionNode.RHS)
+		if err != nil {
+			return Context{}, err
+		}
+
+		relativeSecondNumber := secondNumber
+		if relativeSecondNumber &lt; 0 {
+			relativeSecondNumber = len(lhsNode.Content) + secondNumber
+		}
+		if relativeSecondNumber &lt; 0 {
+			relativeSecondNumber = 0
+		} else if relativeSecondNumber &gt; len(lhsNode.Content) {
+			relativeSecondNumber = len(lhsNode.Content)
+		}</code></pre>
+
+<p><span class="fix-label">Fix:</span> extract a helper and simplify both call sites:</p>
+
+<pre><code class="language-go">func clampSliceIndex(index, length int) int {
+	if index &lt; 0 {
+		index += length
+	}
+	if index &lt; 0 {
+		return 0
+	}
+	if index &gt; length {
+		return length
+	}
+	return index
+}</code></pre>
+
+<p>Both call sites reduce to <code>relativeFirstNumber := clampSliceIndex(firstNumber, len(lhsNode.Content))</code>.</p>
+</div>
+
+<div class="card card-suggestion">
+<div class="finding-title" id="S2">
+  <span class="finding-num">S2.</span> No type guard for non-sequence nodes (suggestion, gap) <span class="pill pill-gemini">Gemini</span>
+  <a href="#S2" class="pilcrow">¶</a>
+</div>
+
+<p><code>sliceArrayOperator</code> assumes <code>lhsNode</code> is a sequence. Slicing a scalar or mapping node silently produces a confusing result (an empty sequence tagged <code>!!str</code> or <code>!!map</code>). Gemini verified: <code>echo '"hello"' | yq eval '.[0:2]'</code> outputs <code>!!str []</code>. This is pre-existing and not worsened by the fix; it may be intentional.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/b18f62b09442d9710e1f01ef9e718e121cfab94f/pkg/yqlib/operator_slice.go#L27-L28">pkg/yqlib/operator_slice.go</a></div>
+<pre data-start="27" data-line="27-28"><code class="language-go">	for el := context.MatchingNodes.Front(); el != nil; el = el.Next() {
+		lhsNode := el.Value.(*CandidateNode)</code></pre>
+
+<p><span class="fix-label">Fix:</span> if not intentional, add a <code>lhsNode.Kind != SequenceNode</code> guard with a clear error message.</p>
+</div>
+
+<hr>
+
+<h2 id="design-observations" class="section-design">Design Observations <a href="#design-observations" class="pilcrow">¶</a></h2>
+
+<div class="card card-design">
+<h3>Strengths</h3>
+<ul>
+<li>The fix clamps both indices symmetrically, even though only the second index was reported. This prevents the same panic through the first-index path. <em>(in-scope)</em> <span class="pill pill-claude">Claude</span></li>
+<li>Clamping uses <code>[0, len(Content)]</code> rather than <code>[0, len(Content)-1]</code>, correctly preserving half-open interval semantics. <em>(in-scope)</em> <span class="pill pill-claude">Claude</span></li>
+</ul>
+</div>
+
+<hr>
+
+<h2 id="testing-assessment">Testing Assessment <a href="#testing-assessment" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<p>The existing test suite covers normal slicing, omitted first/second index, negative indices within range, indices beyond array length, and multi-array contexts. The new regression test covers the new second-index clamping path but does not exercise the original panic.</p>
+<p>Untested scenarios ranked by risk:</p>
+<ol>
+<li><strong>First-index underflow</strong> (<code>.[-99999:3]</code>) — exercises <a href="https://github.com/mikefarah/yq/blob/b18f62b09442d9710e1f01ef9e718e121cfab94f/pkg/yqlib/operator_slice.go#L39-L40">lines 39–40</a>, the only new code path without coverage. <strong>(see <a href="#I1">I1</a>)</strong></li>
+<li><strong>Both indices underflow</strong> (<code>.[-99999:-99998]</code>) — exercises both clamping paths simultaneously.</li>
+<li><strong>First-index underflow on an empty sequence</strong> (<code>[] | .[-99999:]</code>) — edge case combining empty array with underflow.</li>
+</ol>
+</div>
+
+<hr>
+
+<h2 id="documentation-assessment">Documentation Assessment <a href="#documentation-assessment" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<p>No documentation gaps. The commit message explains the root cause, fix, and links the OSS-Fuzz issue.</p>
+</div>
+
+<hr>
+
+<h2 id="commit-structure">Commit Structure <a href="#commit-structure" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<p>Single commit, single logical change. The message accurately describes the fix. Clean.</p>
+</div>
+
+<hr>
+
+<h2 id="agent-performance-retro">Agent Performance Retro <a href="#agent-performance-retro" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<h3><span class="pill pill-claude">Claude</span></h3>
+<p>Claude read both changed files, ran <code>git blame</code>, ran the test suite, and searched the codebase for similar patterns. It correctly identified the missing first-index test coverage (<a href="#I1">I1</a>) and the helper extraction opportunity (<a href="#S1">S1</a>). It also noted two design strengths (symmetric clamping and correct half-open interval semantics).</p>
+<p>Claude did not verify whether the existing test actually triggers the panic on unpatched code — it assumed the test was partially effective rather than wholly ineffective.</p>
+</div>
+
+<div class="card card-neutral">
+<h3><span class="pill pill-codex">Codex</span></h3>
+<p>Codex was the fastest agent (82s). It ran targeted <code>git blame</code> on both the fix and test lines, ran the test suite, and searched for related patterns. It identified the missing first-index test (<a href="#I1">I1</a>) with a clear explanation and concrete fix suggestion including both first-index and both-index underflow tests.</p>
+<p>Like Claude, Codex did not verify whether the existing test panics on unpatched code.</p>
+</div>
+
+<div class="card card-neutral">
+<h3><span class="pill pill-gemini">Gemini</span></h3>
+<p>Gemini was the most thorough in verification, spending 344s and making 42 tool calls. It checked out the pre-fix commit and ran the test expression against unpatched code, confirming that <code>.[0:-99999]</code> does not panic. It also verified that <code>.[-99999:-99998]</code> does panic on unpatched code. This empirical verification was the review's most valuable contribution.</p>
+<p>Gemini also found a pre-existing type-guard gap (<a href="#S2">S2</a>) by testing <code>echo '"hello"' | yq eval '.[0:2]'</code> — an issue no other agent discovered.</p>
+<p>Gemini never ran <code>git blame</code>, consistent with known quota limitations for the daily Pro model. However, it compensated by running code against both patched and unpatched versions — a stronger verification method for this review.</p>
+</div>
+
+<div class="card card-neutral">
+<h3>Tool call highlights</h3>
+<ul>
+<li><strong><span class="pill pill-claude">Claude</span>:</strong> Used <code>git blame</code> (1 call) to verify authorship. Ran tests (1 call). Searched for similar patterns with 4 grep calls. Efficient 11-call session.</li>
+<li><strong><span class="pill pill-codex">Codex</span>:</strong> Used <code>git blame</code> (2 targeted calls on specific line ranges). Ran tests twice. Searched with 4 <code>rg</code> calls. Efficient 16-call session.</li>
+<li><strong><span class="pill pill-gemini">Gemini</span>:</strong> Never ran <code>git blame</code>. Made 14 <code>git checkout</code> calls to switch between patched and unpatched code — high volume but justified by the empirical verification approach. Ran 12 <code>echo | go run</code> commands testing various edge cases. Extensive exploration (42 calls total) that produced the review's key insight.</li>
+</ul>
+</div>
+
+<div class="card card-neutral">
+<h3>Summary</h3>
+
+<table class="retro-table">
+<tr>
+  <th></th>
+  <th><span class="pill pill-claude">Claude</span> Opus 4.6</th>
+  <th><span class="pill pill-codex">Codex</span> GPT 5.4</th>
+  <th><span class="pill pill-gemini">Gemini</span> 3.1 Pro</th>
+</tr>
+<tr><td>Duration</td><td>143s</td><td>82s</td><td>344s</td></tr>
+<tr><td>Findings</td><td>0C 1I 1S</td><td>0C 1I 0S</td><td>0C 1I 2S</td></tr>
+<tr><td>Tool calls</td><td>11 (Read 3, Bash 4, Grep 4)</td><td>16 (exec_command 14)</td><td>42 (run_shell_command 35, read_file 4)</td></tr>
+<tr><td>Design observations</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td>False positives</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>Downgraded</td><td>0</td><td>0</td><td>1 (I→S)</td></tr>
+<tr><td>Unique insights</td><td>0</td><td>0</td><td>1 (S2)</td></tr>
+<tr><td>Files reviewed</td><td>2</td><td>2</td><td>2</td></tr>
+<tr><td>Coverage misses</td><td>0</td><td>0</td><td>0</td></tr>
+</table>
+
+<p><strong>Reconciliation:</strong> Gemini I2 (missing type guard for non-sequence nodes): important → suggestion <a href="#S2">S2</a>. The issue is pre-existing and unrelated to the negative-index fix; it does not meet the "important" bar for a change-scoped review.</p>
+
+<p>Gemini provided the most value on this review. Its empirical verification — running the test expression against unpatched code — revealed that the regression test is not merely incomplete but wholly ineffective. Claude and Codex both identified the missing first-index coverage but missed that the existing test also fails to serve its stated purpose. Codex was the most efficient, delivering a focused review in under 90 seconds.</p>
+</div>
+
+  </main>
+  <script>window.Prism = window.Prism || {}; Prism.manual = true;</script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-go.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-diff.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+  <script>
+/* Deep Review — Prism initialization and line-number wrapping.
+ * Inlined into each generated HTML file by the beautify-review skill.
+ * Runs synchronously at the end of <body> — no event listeners.
+ *
+ * Prerequisite: a preceding <script> must set Prism.manual = true
+ * before the Prism core <script> loads.
+ */
+
+Prism.highlightAll();
+
+document.querySelectorAll('pre[data-start]').forEach(function(pre) {
+  var startLine = parseInt(pre.getAttribute('data-start'), 10) || 1;
+  var hlAttr = pre.getAttribute('data-line') || '';
+
+  /* Parse data-line into a Set of line numbers to highlight.
+   * Accepts comma-separated values: "75,76,77" or ranges: "75-84". */
+  var hlLines = new Set();
+  hlAttr.split(',').forEach(function(part) {
+    part = part.trim();
+    if (!part) return;
+    var m = part.match(/^(\d+)-(\d+)$/);
+    if (m) {
+      for (var i = parseInt(m[1], 10); i <= parseInt(m[2], 10); i++) hlLines.add(i);
+    } else {
+      hlLines.add(parseInt(part, 10));
+    }
+  });
+
+  var code = pre.querySelector('code');
+  if (!code) return;
+
+  var html = code.innerHTML;
+  var lines = html.split('\n');
+  /* Strip a trailing empty line that Prism sometimes leaves. */
+  if (lines.length > 0 && lines[lines.length - 1].trim() === '') lines.pop();
+
+  var wrapped = lines.map(function(line, idx) {
+    var lineNum = startLine + idx;
+    var cls = 'code-line' + (hlLines.has(lineNum) ? ' line-hl' : '');
+    return '<span class="' + cls + '">' + line + '</span>';
+  });
+
+  /* Join with '' (empty string) — NOT '\n'.
+   * Inside <pre>, newlines are literal whitespace. Since .code-line uses
+   * display: block, joining with '\n' produces double line spacing. */
+  code.innerHTML = wrapped.join('');
+  pre.style.counterReset = 'line ' + (startLine - 1);
+});
+
+/* GitHub reference tooltips — show title and state on hover for #N links.
+ * Links must have class="gh-ref" and data-title set by the generator. */
+document.querySelectorAll('a.gh-ref[data-title]').forEach(function(link) {
+  var tip = null;
+
+  link.addEventListener('mouseenter', function() {
+    if (tip) return;
+    tip = document.createElement('div');
+    tip.className = 'gh-tooltip';
+
+    var state = link.getAttribute('data-state') || '';
+    var type = link.getAttribute('data-type') || 'issue';
+    var label = state.charAt(0).toUpperCase() + state.slice(1).toLowerCase();
+
+    var pill = document.createElement('span');
+    pill.className = 'gh-tooltip-state gh-state-' + state;
+    pill.textContent = label + (type === 'pr' ? ' PR' : '');
+
+    var title = document.createElement('span');
+    title.className = 'gh-tooltip-title';
+    title.textContent = link.getAttribute('data-title');
+
+    tip.appendChild(pill);
+    tip.appendChild(title);
+    document.body.appendChild(tip);
+
+    var rect = link.getBoundingClientRect();
+    var tw = tip.offsetWidth;
+    var th = tip.offsetHeight;
+    var left = rect.left + window.scrollX;
+    var top = rect.top + window.scrollY - th - 8;
+
+    if (left + tw > window.innerWidth - 12) left = window.innerWidth - tw - 12;
+    if (left < 4) left = 4;
+    if (top < window.scrollY + 4) top = rect.bottom + window.scrollY + 8;
+
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+    tip.style.opacity = '1';
+  });
+
+  link.addEventListener('mouseleave', function() {
+    if (tip) { tip.remove(); tip = null; }
+  });
+});
+  </script>
+</body>
+</html>
