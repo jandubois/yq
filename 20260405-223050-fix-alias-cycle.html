@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deep Review: 20260405-223050-fix-alias-cycle</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <style>
+/* Deep Review — canonical stylesheet
+ * Inlined into each generated HTML file by the beautify-review skill.
+ * Edit this file to change the look of all future reviews.
+ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  color: #1f2937;
+  background: #f8f9fb;
+  margin: 0;
+  padding: 2rem 1rem;
+}
+main { max-width: 900px; margin: 0 auto; }
+h1 { font-size: 1.6rem; margin-bottom: 0.5rem; color: #111827; }
+h2 { font-size: 1.35rem; margin-top: 2.5rem; margin-bottom: 1rem; color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.4rem; }
+h3 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.8rem; }
+hr { border: none; border-top: 2px solid #e5e7eb; margin: 2rem 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace; font-size: 0.85em; background: #f3f4f6; padding: 0.15em 0.35em; border-radius: 4px; }
+
+/* Code blocks — override Prism defaults */
+pre { margin: 0 !important; border-radius: 0 0 8px 8px !important; }
+pre[class*="language-"] { font-size: 0.78rem; line-height: 1.3; }
+pre code { background: none; padding: 0; }
+
+/* Report metadata table */
+.meta-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+.meta-table td { padding: 0.35rem 0.6rem; border: 1px solid #e5e7eb; vertical-align: top; }
+.meta-table td:first-child { font-weight: 600; width: 140px; background: #f9fafb; white-space: nowrap; }
+
+/* Cards — every section and finding lives in a card */
+.card { border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 1.2rem; }
+.card-neutral { background: #f1f3f5; border: 1px solid #d5d9e0; }
+.card-critical { background: #ffeef0; border: 1px solid #f5c6cb; }
+.card-important { background: #fff0e0; border: 1px solid #f5d9a8; }
+.card-suggestion { background: #f0f6ff; border: 1px solid #c7d9f5; }
+.card-design { background: #f0faf4; border: 1px solid #b7e4c7; }
+
+/* Severity section headings — colored to match their cards */
+.section-critical { color: #9b1c1c; }
+.section-important { color: #92400e; }
+.section-suggestion { color: #1e40af; }
+.section-design { color: #065f46; }
+
+/* Agent attribution pills */
+.pill { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 0.15em 0.55em; border-radius: 999px; margin-right: 0.3em; vertical-align: middle; letter-spacing: 0.01em; }
+.pill-claude { background: #e9d5ff; color: #6b21a8; }
+.pill-codex { background: #d1fae5; color: #065f46; }
+.pill-gemini { background: #ffe4e6; color: #9f1239; }
+
+/* Finding titles */
+.finding-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.6rem; line-height: 1.4; }
+.finding-num { font-weight: 800; }
+
+/* Code file header — dark bar above each source code block. */
+.code-file-header { background: #2d333b; color: #adbac7; font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-size: 0.75rem; padding: 0.4rem 0.9rem; border-radius: 8px 8px 0 0; margin-top: 0.8rem; }
+.code-file-header a { color: #7ee787; }
+.code-file-header a:hover { text-decoration: underline; }
+
+/* Line numbers (CSS counters) and line highlighting */
+.code-line { display: block; }
+.code-line::before {
+  content: counter(line);
+  counter-increment: line;
+  display: inline-block;
+  width: 3em;
+  margin-right: 0.8em;
+  padding-right: 0.5em;
+  text-align: right;
+  color: #636e7b;
+  border-right: 1px solid #3d4556;
+  user-select: none;
+}
+.line-hl { background: rgba(255, 199, 0, 0.18); }
+
+/* Pilcrow anchor links — hidden until parent is hovered */
+.pilcrow { color: #d1d5db; text-decoration: none; font-weight: 400; margin-left: 0.4em; opacity: 0; transition: opacity 0.15s; }
+h2:hover .pilcrow, h3:hover .pilcrow, .finding-title:hover .pilcrow { opacity: 1; }
+.pilcrow:hover { color: #6b7280; text-decoration: none; }
+
+/* Fix label */
+.fix-label { font-weight: 700; }
+
+/* Agent retro summary table */
+.retro-table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.9rem; table-layout: fixed; }
+.retro-table th, .retro-table td { padding: 0.45rem 0.7rem; border: 1px solid #e5e7eb; text-align: left; }
+.retro-table th { background: #f3f4f6; font-weight: 600; }
+.retro-table tr:nth-child(even) { background: #f9fafb; }
+
+/* Lists and paragraphs inside cards */
+.card ul, .card ol { margin: 0.4rem 0; padding-left: 1.5rem; }
+.card li { margin-bottom: 0.3rem; }
+.card p { margin: 0.5rem 0; }
+.card p:first-child { margin-top: 0; }
+
+/* Verdict highlight in metadata table */
+.verdict { font-weight: 700; }
+
+/* GitHub reference tooltips — shown on hover for #N links */
+.gh-tooltip {
+  position: absolute;
+  background: #1f2328;
+  color: #e6edf3;
+  padding: 0.55em 0.75em;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  max-width: 380px;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.28);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.gh-tooltip-state {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15em 0.5em;
+  border-radius: 999px;
+  margin-right: 0.4em;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+.gh-state-open { background: #238636; color: #fff; }
+.gh-state-closed { background: #848d97; color: #fff; }
+.gh-state-merged { background: #8957e5; color: #fff; }
+.gh-tooltip-title { vertical-align: baseline; }
+
+/* Mobile */
+@media (max-width: 640px) {
+  body { padding: 1rem 0.5rem; }
+  .card { padding: 0.9rem 1rem; }
+  pre code { font-size: 0.72rem; }
+}
+  </style>
+</head>
+<body>
+  <main>
+
+<h1>Deep Review: 20260405-223050-fix-alias-cycle</h1>
+
+<table class="meta-table">
+<tr><td>Date</td><td>2026-04-05 22:30</td></tr>
+<tr><td>Repo</td><td><a href="https://github.com/mikefarah/yq">mikefarah/yq</a></td></tr>
+<tr><td>Round</td><td>1</td></tr>
+<tr><td>Author</td><td>Jan Dubois &lt;jan@jandubois.com&gt;</td></tr>
+<tr><td>Branch</td><td><code>fix-alias-cycle</code></td></tr>
+<tr><td>Commits</td><td><code><a href="https://github.com/mikefarah/yq/commit/9b7ddcf3">9b7ddcf3</a></code> Fix stack overflow from circular alias in traverse</td></tr>
+<tr><td>Reviewers</td><td><span class="pill pill-claude">Claude</span> Opus 4.6, <span class="pill pill-codex">Codex</span> GPT 5.4, <span class="pill pill-gemini">Gemini</span> 3.1 Pro</td></tr>
+<tr><td>Verdict</td><td><span class="verdict">Merge with fixes</span> — the same recursive alias pattern in <code>traverseArrayIndices</code> remains unfixed</td></tr>
+<tr><td>Wall-clock time</td><td>10 min 44 s</td></tr>
+</table>
+
+<hr>
+
+<h2 id="executive-summary">Executive Summary <a href="#executive-summary" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<p>This change replaces the recursive <code>AliasNode</code> case in <code>traverse()</code> with an iterative loop that detects alias cycles via a visited set, preventing a stack overflow from circular aliases. The fix is correct for <code>traverse()</code>, but a sibling function <code>traverseArrayIndices()</code> in the same file contains an identical recursive alias pattern that remains vulnerable — reachable through <code>.[]</code>, <code>.[0]</code>, and every operator built on <code>splat()</code>.</p>
+</div>
+
+<hr>
+
+<h2 id="critical-issues" class="section-critical">Critical Issues <a href="#critical-issues" class="pilcrow">¶</a></h2>
+
+<div class="card card-critical">
+<p>None.</p>
+</div>
+
+<hr>
+
+<h2 id="important-issues" class="section-important">Important Issues <a href="#important-issues" class="pilcrow">¶</a></h2>
+
+<div class="card card-important">
+<div class="finding-title" id="I1">
+  <span class="finding-num">I1.</span> <code>traverseArrayIndices</code> retains the same recursive alias pattern <span class="pill pill-claude">Claude</span> <span class="pill pill-codex">Codex</span> (important, gap)
+  <a href="#I1" class="pilcrow">¶</a>
+</div>
+
+<p><code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L135-L151">traverseArrayIndices()</a></code> follows aliases recursively at <a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L148-L150">lines 148-150</a> with no cycle detection, identical to the pre-fix <code>traverse()</code> code. A circular alias node reached through array indexing (<code>.[]</code>, <code>.[0]</code>) or any <code>splat()</code> caller will still crash with a stack overflow.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L140-L155">pkg/yqlib/operator_traverse_path.go</a></div>
+<pre data-start="140" data-line="148,149,150"><code class="language-go">	switch matchingNode.Kind {
+	case AliasNode:
+		matchingNode = matchingNode.Alias
+		return traverseArrayIndices(context, matchingNode, indicesToTraverse, prefs)
+	case SequenceNode:
+		return traverseArrayWithIndices(matchingNode, indicesToTraverse, prefs)
+	case MappingNode:
+		return traverseMapWithIndices(context, matchingNode, indicesToTraverse, prefs)
+	}
+	log.Debugf("OperatorArrayTraverse skipping %v as its a %v", matchingNode, matchingNode.Tag)
+	return list.New(), nil
+}
+</code></pre>
+
+<p>Codex traced the exposure through: <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L121">traverseNodesWithArrayIndices</a></code> (<a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L121">line 121</a>), <code>TRAVERSE_ARRAY</code> dispatch in <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operation.go#L176">operation.go:176</a></code>, lexer injection for array syntax in <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/lexer.go#L175-L180">lexer.go:175-180</a></code>, and <code>splat()</code> callers in <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_recursive_descent.go#L34">operator_recursive_descent.go:34</a></code>, <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_collect_object.go#L83">operator_collect_object.go:83</a></code>, <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_compare.go#L140">operator_compare.go:140</a></code>, <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_entries.go#L140">operator_entries.go:140</a></code>, <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_first.go#L19">operator_first.go:19</a></code>, <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_map.go#L13">operator_map.go:13</a></code>, <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_map.go#L40">operator_map.go:40</a></code>, and <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_filter.go#L14">operator_filter.go:14</a></code>. <code>git blame</code> confirms these lines predate this change.</p>
+
+<p><span class="fix-label">Fix:</span> extract a shared helper that both functions call, eliminating the duplication:</p>
+
+<pre><code class="language-diff">+func resolveAliasChain(node *CandidateNode) (*CandidateNode, error) {
++	if node.Kind != AliasNode {
++		return node, nil
++	}
++	visited := map[*CandidateNode]bool{}
++	for node.Kind == AliasNode {
++		if visited[node] {
++			return nil, fmt.Errorf("alias cycle detected")
++		}
++		visited[node] = true
++		node = node.Alias
++	}
++	return node, nil
++}
+</code></pre>
+
+<p>Use <code>resolveAliasChain</code> at the top of both <code>traverse()</code> and <code>traverseArrayIndices()</code>, and remove the <code>case AliasNode</code> branch from <code>traverseArrayIndices</code>.</p>
+</div>
+
+<hr>
+
+<h2 id="suggestions" class="section-suggestion">Suggestions <a href="#suggestions" class="pilcrow">¶</a></h2>
+
+<div class="card card-suggestion">
+<div class="finding-title" id="S1">
+  <span class="finding-num">S1.</span> Unnecessary map allocation on the hot path <span class="pill pill-claude">Claude</span> (suggestion, regression)
+  <a href="#S1" class="pilcrow">¶</a>
+</div>
+
+<p><code>traverse()</code> runs for every node traversal. The map at <a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L43">line 43</a> allocates even when <code>matchingNode.Kind</code> is not <code>AliasNode</code> and the loop body never executes.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L39-L51">pkg/yqlib/operator_traverse_path.go</a></div>
+<pre data-start="39" data-line="43,44"><code class="language-go">func traverse(context Context, matchingNode *CandidateNode, operation *Operation) (*list.List, error) {
+	log.Debugf("Traversing %v", NodeToString(matchingNode))
+
+	// Follow alias chains iteratively with cycle detection.
+	visited := map[*CandidateNode]bool{}
+	for matchingNode.Kind == AliasNode {
+		if visited[matchingNode] {
+			return nil, fmt.Errorf("alias cycle detected")
+		}
+		visited[matchingNode] = true
+		log.Debug("its an alias!")
+		matchingNode = matchingNode.Alias
+	}
+</code></pre>
+
+<p><span class="fix-label">Fix:</span> guard the allocation with an <code>if</code> check:</p>
+
+<pre><code class="language-diff">-	visited := map[*CandidateNode]bool{}
+-	for matchingNode.Kind == AliasNode {
++	if matchingNode.Kind == AliasNode {
++		visited := map[*CandidateNode]bool{}
++		for matchingNode.Kind == AliasNode {
++			if visited[matchingNode] {
++				return nil, fmt.Errorf("alias cycle detected")
++			}
++			visited[matchingNode] = true
++			log.Debug("its an alias!")
++			matchingNode = matchingNode.Alias
++		}
+ 	}
+</code></pre>
+
+<p>This is moot if the shared <code>resolveAliasChain</code> helper from I1 is adopted, since the guard belongs naturally in that function.</p>
+</div>
+
+<div class="card card-suggestion">
+<div class="finding-title" id="S2">
+  <span class="finding-num">S2.</span> Test covers only a self-referencing cycle <span class="pill pill-claude">Claude</span> (suggestion, gap)
+  <a href="#S2" class="pilcrow">¶</a>
+</div>
+
+<p>The test constructs a single-node cycle (<code>A -&gt; A</code>) at <a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path_test.go#L693">line 693</a>. A two-node cycle (<code>A -&gt; B -&gt; A</code>) would exercise the visited-set tracking across multiple distinct nodes, guarding against future regressions in the map logic.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path_test.go#L686-L706">pkg/yqlib/operator_traverse_path_test.go</a></div>
+<pre data-start="686" data-line="693"><code class="language-go">// Regression test for https://issues.oss-fuzz.com/issues/390467412
+// A circular alias (alias pointing back to itself) must not cause a
+// stack overflow. traverse() should detect the cycle and return an error.
+func TestTraverseAliasCycle(t *testing.T) {
+	aliasNode := &amp;CandidateNode{
+		Kind: AliasNode,
+	}
+	aliasNode.Alias = aliasNode // circular
+
+	op := &amp;Operation{
+		OperationType: traversePathOpType,
+		Value:         "key",
+		StringValue:   "key",
+		Preferences:   traversePreferences{},
+	}
+	_, err := traverse(Context{}, aliasNode, op)
+	if err == nil {
+		t.Fatal("expected error for alias cycle, got nil")
+	}
+	if err.Error() != "alias cycle detected" {
+		t.Fatalf("expected 'alias cycle detected', got %q", err.Error())
+	}
+}
+</code></pre>
+
+<p><span class="fix-label">Fix:</span> add a second test case with a two-node cycle:</p>
+
+<pre><code class="language-go">func TestTraverseAliasCycleChain(t *testing.T) {
+	nodeA := &amp;CandidateNode{Kind: AliasNode}
+	nodeB := &amp;CandidateNode{Kind: AliasNode}
+	nodeA.Alias = nodeB
+	nodeB.Alias = nodeA // A -&gt; B -&gt; A
+
+	op := &amp;Operation{
+		OperationType: traversePathOpType,
+		Value:         "key",
+		StringValue:   "key",
+		Preferences:   traversePreferences{},
+	}
+	_, err := traverse(Context{}, nodeA, op)
+	if err == nil {
+		t.Fatal("expected error for alias cycle chain, got nil")
+	}
+	if err.Error() != "alias cycle detected" {
+		t.Fatalf("expected 'alias cycle detected', got %q", err.Error())
+	}
+}
+</code></pre>
+</div>
+
+<hr>
+
+<h2 id="design-observations" class="section-design">Design Observations <a href="#design-observations" class="pilcrow">¶</a></h2>
+
+<div class="card card-design">
+<h3>Concerns</h3>
+<ol>
+<li><em>(in-scope)</em> Alias dereferencing is duplicated across traversal helpers — <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L42-L50">traverse()</a></code> (<a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L42-L50">lines 42-50</a>), <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L148-L150">traverseArrayIndices()</a></code> (<a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L148-L150">lines 148-150</a>), and <code><a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L340-L355">traverseMergeAnchor()</a></code> (<a href="https://github.com/mikefarah/yq/blob/9b7ddcf39ec38208a81691b04309966ea1992f26/pkg/yqlib/operator_traverse_path.go#L340-L355">lines 340-355</a>). A shared <code>resolveAliasChain</code> helper would centralise cycle detection so future alias-handling changes need not audit every dereferencing site. This would have prevented the partial fix. <span class="pill pill-claude">Claude</span> <span class="pill pill-codex">Codex</span></li>
+</ol>
+
+<h3>Strengths</h3>
+<ol>
+<li>Replacing recursion with an iterative loop and visited set is the right approach: bounded stack usage, O(N) memory for N-node chains, and a clean error return instead of a crash. <span class="pill pill-claude">Claude</span> <span class="pill pill-codex">Codex</span></li>
+<li>Placing alias resolution before the kind-based switch cleanly separates concerns: resolve first, then dispatch on the resolved kind. <span class="pill pill-claude">Claude</span></li>
+</ol>
+</div>
+
+<hr>
+
+<h2 id="testing-assessment">Testing Assessment <a href="#testing-assessment" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<p>The regression test directly constructs a circular alias and verifies the error — the right approach for crash prevention. Untested scenarios, ranked by risk:</p>
+<ol>
+<li>Circular alias through <code>traverseArrayIndices</code> (the gap in <a href="#I1">I1</a>) — same crash class, different code path, no test coverage.</li>
+<li>Operators built on <code>splat()</code> with circular aliases — <code>map</code>, <code>filter</code>, <code>first</code>, <code>to_entries</code>, <code>collect_object</code>, <code>compare</code>, and recursive descent are all exposed.</li>
+<li>Multi-node alias chain through <code>traverse()</code> (<a href="#S2">S2</a>) — code handles it correctly, but no test confirms this.</li>
+<li>The test calls <code>traverse()</code> directly, bypassing the parser and dispatcher, so it does not prove the public expression surface is safe.</li>
+</ol>
+</div>
+
+<hr>
+
+<h2 id="agent-performance-retro">Agent Performance Retro <a href="#agent-performance-retro" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<h3><span class="pill pill-claude">Claude</span></h3>
+<p>Claude read both changed files, grepped for <code>AliasNode</code> and <code>.Alias</code> across the codebase, ran <code>git blame</code> on the flagged lines, and executed the test suite to verify the tests pass. It identified the <code>traverseArrayIndices</code> gap (<a href="#I1">I1</a>), the hot-path map allocation (<a href="#S1">S1</a>), and the missing multi-node cycle test (<a href="#S2">S2</a>). All three findings survived consolidation. Claude also read <code>encoder_properties.go</code> and <code>encoder_shellvariables.go</code> to check alias handling in encoders — thorough context exploration.</p>
+
+<h3><span class="pill pill-codex">Codex</span></h3>
+<p>Codex performed the most thorough call-site tracing, following <code>traverseArrayIndices</code> through <code>traverseNodesWithArrayIndices</code>, the <code>TRAVERSE_ARRAY</code> operator dispatch, the lexer, and all <code>splat()</code> callers across 10+ operator files. It ran <code>git blame</code> three times and used <code>rg</code> extensively (7 searches). Its <a href="#I1">I1</a> finding was broader than Claude's, enumerating every exposed operator. It produced no suggestions beyond the shared finding.</p>
+
+<h3><span class="pill pill-gemini">Gemini</span></h3>
+<p>Gemini hit a <code>TerminalQuotaError</code> (429, <code>QUOTA_EXHAUSTED</code>) on first API call and produced no output. Dropped from the review.</p>
+
+<h3>Tool call highlights</h3>
+<ul>
+<li>Claude ran <code>git blame</code> twice and executed <code>go test</code> — the only agent to verify tests pass. It used 3 grep searches to find all alias-related patterns.</li>
+<li>Codex ran 36 tool calls (all <code>exec_command</code>), including 7 <code>rg</code> searches and 3 <code>git blame</code> calls. The high call count reflects thorough call-site tracing rather than thrashing — each search targeted a different pattern.</li>
+<li>Gemini made no tool calls due to quota exhaustion.</li>
+</ul>
+
+<h3>Summary</h3>
+
+<table class="retro-table">
+<tr>
+  <th></th>
+  <th><span class="pill pill-claude">Claude</span> Opus 4.6</th>
+  <th><span class="pill pill-codex">Codex</span> GPT 5.4</th>
+  <th><span class="pill pill-gemini">Gemini</span> 3.1 Pro</th>
+</tr>
+<tr><td>Duration</td><td>165 s</td><td>195 s</td><td>115 s (failed)</td></tr>
+<tr><td>Findings</td><td>0C 1I 2S</td><td>0C 1I 0S</td><td>—</td></tr>
+<tr><td>Tool calls</td><td>21 (Bash 10, Read 8, Grep 3)</td><td>36 (exec_command 36)</td><td>0</td></tr>
+<tr><td>Design observations</td><td>2</td><td>2</td><td>—</td></tr>
+<tr><td>False positives</td><td>0</td><td>0</td><td>—</td></tr>
+<tr><td>Unique insights</td><td><a href="#S1">S1</a>, <a href="#S2">S2</a></td><td>splat() caller enumeration</td><td>—</td></tr>
+<tr><td>Files reviewed</td><td>2/2</td><td>2/2</td><td>—</td></tr>
+<tr><td>Coverage misses</td><td>0</td><td>0</td><td>—</td></tr>
+</table>
+
+<p><strong>Reconciliation:</strong> No severity changes during consolidation. Both agents rated the <code>traverseArrayIndices</code> gap as important; the consolidated <a href="#I1">I1</a> merges their findings (Claude identified the gap, Codex added the full call-site trace). Claude's <a href="#S1">S1</a> and <a href="#S2">S2</a> passed through as-is. No false positives, no downgrades, no drops.</p>
+</div>
+
+<hr>
+
+<h2 id="review-process-notes">Review Process Notes <a href="#review-process-notes" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+<h3>Repo context updates</h3>
+<ul>
+<li>yq's alias dereferencing occurs in multiple functions across <code>operator_traverse_path.go</code> (at least <code>traverse</code>, <code>traverseArrayIndices</code>, and merge handling). Future reviews of alias-related changes should verify that all dereferencing sites are handled consistently.</li>
+</ul>
+</div>
+
+</main>
+<script>window.Prism = window.Prism || {}; Prism.manual = true;</script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-go.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-diff.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+<script>
+/* Deep Review — Prism initialization and line-number wrapping.
+ * Inlined into each generated HTML file by the beautify-review skill.
+ * Runs synchronously at the end of <body> — no event listeners.
+ *
+ * Prerequisite: a preceding <script> must set Prism.manual = true
+ * before the Prism core <script> loads.
+ */
+
+Prism.highlightAll();
+
+document.querySelectorAll('pre[data-start]').forEach(function(pre) {
+  var startLine = parseInt(pre.getAttribute('data-start'), 10) || 1;
+  var hlAttr = pre.getAttribute('data-line') || '';
+
+  /* Parse data-line into a Set of line numbers to highlight.
+   * Accepts comma-separated values: "75,76,77" or ranges: "75-84". */
+  var hlLines = new Set();
+  hlAttr.split(',').forEach(function(part) {
+    part = part.trim();
+    if (!part) return;
+    var m = part.match(/^(\d+)-(\d+)$/);
+    if (m) {
+      for (var i = parseInt(m[1], 10); i <= parseInt(m[2], 10); i++) hlLines.add(i);
+    } else {
+      hlLines.add(parseInt(part, 10));
+    }
+  });
+
+  var code = pre.querySelector('code');
+  if (!code) return;
+
+  var html = code.innerHTML;
+  var lines = html.split('\n');
+  /* Strip a trailing empty line that Prism sometimes leaves. */
+  if (lines.length > 0 && lines[lines.length - 1].trim() === '') lines.pop();
+
+  var wrapped = lines.map(function(line, idx) {
+    var lineNum = startLine + idx;
+    var cls = 'code-line' + (hlLines.has(lineNum) ? ' line-hl' : '');
+    return '<span class="' + cls + '">' + line + '</span>';
+  });
+
+  /* Join with '' (empty string) — NOT '\n'.
+   * Inside <pre>, newlines are literal whitespace. Since .code-line uses
+   * display: block, joining with '\n' produces double line spacing. */
+  code.innerHTML = wrapped.join('');
+  pre.style.counterReset = 'line ' + (startLine - 1);
+});
+
+/* GitHub reference tooltips — show title and state on hover for #N links.
+ * Links must have class="gh-ref" and data-title set by the generator. */
+document.querySelectorAll('a.gh-ref[data-title]').forEach(function(link) {
+  var tip = null;
+
+  link.addEventListener('mouseenter', function() {
+    if (tip) return;
+    tip = document.createElement('div');
+    tip.className = 'gh-tooltip';
+
+    var state = link.getAttribute('data-state') || '';
+    var type = link.getAttribute('data-type') || 'issue';
+    var label = state.charAt(0).toUpperCase() + state.slice(1).toLowerCase();
+
+    var pill = document.createElement('span');
+    pill.className = 'gh-tooltip-state gh-state-' + state;
+    pill.textContent = label + (type === 'pr' ? ' PR' : '');
+
+    var title = document.createElement('span');
+    title.className = 'gh-tooltip-title';
+    title.textContent = link.getAttribute('data-title');
+
+    tip.appendChild(pill);
+    tip.appendChild(title);
+    document.body.appendChild(tip);
+
+    var rect = link.getBoundingClientRect();
+    var tw = tip.offsetWidth;
+    var th = tip.offsetHeight;
+    var left = rect.left + window.scrollX;
+    var top = rect.top + window.scrollY - th - 8;
+
+    if (left + tw > window.innerWidth - 12) left = window.innerWidth - tw - 12;
+    if (left < 4) left = 4;
+    if (top < window.scrollY + 4) top = rect.bottom + window.scrollY + 8;
+
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+    tip.style.opacity = '1';
+  });
+
+  link.addEventListener('mouseleave', function() {
+    if (tip) { tip.remove(); tip = null; }
+  });
+});
+</script>
+</body>
+</html>
