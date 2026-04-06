@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deep Review: 20260405-232458-pr-2639</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <style>
+/* Deep Review — canonical stylesheet
+ * Inlined into each generated HTML file by the beautify-review skill.
+ * Edit this file to change the look of all future reviews.
+ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  color: #1f2937;
+  background: #f8f9fb;
+  margin: 0;
+  padding: 2rem 1rem;
+}
+main { max-width: 900px; margin: 0 auto; }
+h1 { font-size: 1.6rem; margin-bottom: 0.5rem; color: #111827; }
+h2 { font-size: 1.35rem; margin-top: 2.5rem; margin-bottom: 1rem; color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.4rem; }
+h3 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.8rem; }
+hr { border: none; border-top: 2px solid #e5e7eb; margin: 2rem 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace; font-size: 0.85em; background: #f3f4f6; padding: 0.15em 0.35em; border-radius: 4px; }
+
+/* Code blocks — override Prism defaults */
+pre { margin: 0 !important; border-radius: 0 0 8px 8px !important; }
+pre[class*="language-"] { font-size: 0.78rem; line-height: 1.3; }
+pre code { background: none; padding: 0; }
+
+/* Report metadata table */
+.meta-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+.meta-table td { padding: 0.35rem 0.6rem; border: 1px solid #e5e7eb; vertical-align: top; }
+.meta-table td:first-child { font-weight: 600; width: 140px; background: #f9fafb; white-space: nowrap; }
+
+/* Cards — every section and finding lives in a card */
+.card { border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 1.2rem; }
+.card-neutral { background: #f1f3f5; border: 1px solid #d5d9e0; }
+.card-critical { background: #ffeef0; border: 1px solid #f5c6cb; }
+.card-important { background: #fff0e0; border: 1px solid #f5d9a8; }
+.card-suggestion { background: #f0f6ff; border: 1px solid #c7d9f5; }
+.card-design { background: #f0faf4; border: 1px solid #b7e4c7; }
+
+/* Severity section headings — colored to match their cards */
+.section-critical { color: #9b1c1c; }
+.section-important { color: #92400e; }
+.section-suggestion { color: #1e40af; }
+.section-design { color: #065f46; }
+
+/* Agent attribution pills */
+.pill { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 0.15em 0.55em; border-radius: 999px; margin-right: 0.3em; vertical-align: middle; letter-spacing: 0.01em; }
+.pill-claude { background: #e9d5ff; color: #6b21a8; }
+.pill-codex { background: #d1fae5; color: #065f46; }
+.pill-gemini { background: #ffe4e6; color: #9f1239; }
+
+/* Finding titles */
+.finding-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.6rem; line-height: 1.4; }
+.finding-num { font-weight: 800; }
+
+/* Code file header — dark bar above each source code block.
+ * The filename is a GitHub permalink to the displayed line range.
+ * Text color is light gray (#adbac7) for the bar, green (#7ee787)
+ * for the hyperlink — matching GitHub's dark-mode file header. */
+.code-file-header { background: #2d333b; color: #adbac7; font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-size: 0.75rem; padding: 0.4rem 0.9rem; border-radius: 8px 8px 0 0; margin-top: 0.8rem; }
+.code-file-header a { color: #7ee787; }
+.code-file-header a:hover { text-decoration: underline; }
+
+/* Line numbers (CSS counters) and line highlighting */
+.code-line { display: block; }
+.code-line::before {
+  content: counter(line);
+  counter-increment: line;
+  display: inline-block;
+  width: 3em;
+  margin-right: 0.8em;
+  padding-right: 0.5em;
+  text-align: right;
+  color: #636e7b;
+  border-right: 1px solid #3d4556;
+  user-select: none;
+}
+.line-hl { background: rgba(255, 199, 0, 0.18); }
+
+/* Pilcrow anchor links — hidden until parent is hovered */
+.pilcrow { color: #d1d5db; text-decoration: none; font-weight: 400; margin-left: 0.4em; opacity: 0; transition: opacity 0.15s; }
+h2:hover .pilcrow, h3:hover .pilcrow, .finding-title:hover .pilcrow { opacity: 1; }
+.pilcrow:hover { color: #6b7280; text-decoration: none; }
+
+/* Fix label */
+.fix-label { font-weight: 700; }
+
+/* Agent retro summary table */
+.retro-table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.9rem; table-layout: fixed; }
+.retro-table th, .retro-table td { padding: 0.45rem 0.7rem; border: 1px solid #e5e7eb; text-align: left; }
+.retro-table th { background: #f3f4f6; font-weight: 600; }
+.retro-table tr:nth-child(even) { background: #f9fafb; }
+
+/* Lists and paragraphs inside cards */
+.card ul, .card ol { margin: 0.4rem 0; padding-left: 1.5rem; }
+.card li { margin-bottom: 0.3rem; }
+.card p { margin: 0.5rem 0; }
+.card p:first-child { margin-top: 0; }
+
+/* Verdict highlight in metadata table */
+.verdict { font-weight: 700; }
+
+/* GitHub reference tooltips — shown on hover for #N links */
+.gh-tooltip {
+  position: absolute;
+  background: #1f2328;
+  color: #e6edf3;
+  padding: 0.55em 0.75em;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  max-width: 380px;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.28);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.gh-tooltip-state {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15em 0.5em;
+  border-radius: 999px;
+  margin-right: 0.4em;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+.gh-state-open { background: #238636; color: #fff; }
+.gh-state-closed { background: #848d97; color: #fff; }
+.gh-state-merged { background: #8957e5; color: #fff; }
+.gh-tooltip-title { vertical-align: baseline; }
+
+/* Mobile */
+@media (max-width: 640px) {
+  body { padding: 1rem 0.5rem; }
+  .card { padding: 0.9rem 1rem; }
+  pre code { font-size: 0.72rem; }
+}
+  </style>
+</head>
+<body>
+<main>
+
+<h1>Deep Review: 20260405-232458-pr-2639</h1>
+
+<table class="meta-table">
+  <tr><td>Date</td><td>2026-04-05 23:24</td></tr>
+  <tr><td>Repo</td><td><a href="https://github.com/mikefarah/yq">mikefarah/yq</a></td></tr>
+  <tr><td>Round</td><td>1</td></tr>
+  <tr><td>Mode</td><td>Thorough (3 passes)</td></tr>
+  <tr><td>Author</td><td>@copilot-swe-agent (bot)</td></tr>
+  <tr><td>PR</td><td><a href="https://github.com/mikefarah/yq/pull/2639" class="gh-ref" data-type="pr" data-state="open" data-title="Add string slicing support">#2639</a> — Add string slicing support</td></tr>
+  <tr><td>Branch</td><td><code>copilot/add-string-slice-support</code></td></tr>
+  <tr><td>Commits</td><td>
+    <a href="https://github.com/mikefarah/yq/commit/341e2524b97e02755382b165b1bdf2af16d6815b"><code>341e2524</code></a> Fix array slice out-of-bounds panic with very negative indices<br>
+    <a href="https://github.com/mikefarah/yq/commit/778088d7"><code>778088d7</code></a> Update pkg/yqlib/operator_slice.go<br>
+    <a href="https://github.com/mikefarah/yq/commit/9a9399ad"><code>9a9399ad</code></a> Fix sliceStringNode signature and fix test descriptions/expressions<br>
+    <a href="https://github.com/mikefarah/yq/commit/6d345ac7"><code>6d345ac7</code></a> Add string slicing support to yq<br>
+    <a href="https://github.com/mikefarah/yq/commit/26929879"><code>26929879</code></a> Initial plan
+  </td></tr>
+  <tr><td>Reviewers</td><td><span class="pill pill-claude">Claude</span> Opus 4.6, <span class="pill pill-codex">Codex</span> GPT 5.4, <span class="pill pill-gemini">Gemini</span> 3.1 Pro</td></tr>
+  <tr><td>Verdict</td><td><span class="verdict">Merge with fixes</span> — fix byte-vs-rune length inconsistency and add missing string edge-case tests</td></tr>
+  <tr><td>Wall-clock time</td><td><code>54 min 32 s</code></td></tr>
+</table>
+
+<hr>
+
+<h2 id="executive-summary">Executive Summary <a href="#executive-summary" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+  <p>This PR adds rune-based string slicing to yq (<code>.[0:5]</code>, <code>.[4:]</code>, <code>.[-5:]</code> on strings), fixes <code>traverseArrayOperator</code> to evaluate the LHS before slicing, and hardens array slicing against very negative indices. The string slicing implementation is correct for the common case, but it exposes a byte-vs-rune inconsistency with existing operators (<code>length</code>, <code>match</code>) that produces silently wrong results for multibyte Unicode strings. The PR also needs stronger edge-case test coverage and minor structural fixes.</p>
+</div>
+
+<hr>
+
+<h2 id="critical-issues" class="section-critical">Critical Issues <a href="#critical-issues" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+  <p>None.</p>
+</div>
+
+<hr>
+
+<h2 id="important-issues" class="section-important">Important Issues <a href="#important-issues" class="pilcrow">¶</a></h2>
+
+<div class="card card-important">
+  <div class="finding-title" id="I1"><span class="finding-num">I1.</span> Byte-vs-rune length inconsistency produces wrong results for multibyte strings <span class="pill pill-claude">Claude</span><span class="pill pill-gemini">Gemini</span> <a href="#I1" class="pilcrow">¶</a></div>
+
+  <p>The <code>length</code> operator returns byte count, but <code>sliceStringNode</code> uses rune count. For multibyte strings, <code>length</code>-based arithmetic produces wrong slice results. This is not merely masked by clamping — it actively produces incorrect output:</p>
+
+  <pre><code class="language-bash">$ echo '"café"' | yq '(. | length) as $n | .[($n - 2):]'
+é           # WRONG — expected "fé" (last 2 chars)
+
+$ echo '"café"' | yq '.[-2:]'
+fé          # correct with negative index</code></pre>
+
+  <p>The <code>match</code> operator's byte offsets at <a href="https://github.com/mikefarah/yq/blob/341e2524b97e02755382b165b1bdf2af16d6815b/pkg/yqlib/operator_strings.go#L292"><code>operator_strings.go:292</code></a> have the same issue: feeding <code>match("latte").offset</code> into a slice on a multibyte string yields wrong boundaries.</p>
+
+  <p>jq is internally consistent: <code>"café" | length</code> returns 4 (characters), and slicing is character-based. This PR correctly chose rune-based slicing but did not update the pre-existing byte-based <code>length</code> operator. (important, gap)</p>
+
+  <p><span class="fix-label">Fix:</span> Update <code>lengthOperator</code> to use <code>len([]rune(candidate.Value))</code> for non-null scalars, and update <code>addMatch</code> to convert byte offsets to rune offsets via <code>utf8.RuneCountInString</code>. Note: changing <code>length</code> is a behavioural change for multibyte strings and warrants a changelog entry.</p>
+
+  <div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/341e2524b97e02755382b165b1bdf2af16d6815b/pkg/yqlib/operator_length.go#L14-L28">pkg/yqlib/operator_length.go</a></div>
+  <pre data-start="14" data-line="19,20"><code class="language-go">	for el := context.MatchingNodes.Front(); el != nil; el = el.Next() {
+		candidate := el.Value.(*CandidateNode)
+		var length int
+		switch candidate.Kind {
+		case ScalarNode:
+			if candidate.Tag == "!!null" {
+				length = 0
+			} else {
+				length = len(candidate.Value)
+			}
+		case MappingNode:
+			length = len(candidate.Content) / 2
+		case SequenceNode:
+			length = len(candidate.Content)
+		default:
+			length = 0
+		}</code></pre>
+
+  <p><span class="fix-label">Fix (diff):</span></p>
+  <pre><code class="language-diff"> // operator_length.go
+ case ScalarNode:
+     if candidate.Tag == "!!null" {
+         length = 0
+     } else {
+-        length = len(candidate.Value)
++        length = len([]rune(candidate.Value))
+     }</code></pre>
+</div>
+
+<div class="card card-important">
+  <div class="finding-title" id="I2"><span class="finding-num">I2.</span> Inconsistent index-clamping structure between string and array paths <span class="pill pill-claude">Claude</span><span class="pill pill-gemini">Gemini</span> <a href="#I2" class="pilcrow">¶</a></div>
+
+  <p>The string path uses <code>else if</code>, so a very negative <code>secondNumber</code> that remains negative after adjustment never gets clamped to 0 explicitly. It works only because the later <code>secondNumber &lt; firstNumber</code> guard at line 43 catches it. The array path uses separate <code>if</code> blocks that handle this directly. (important, regression)</p>
+
+  <div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/341e2524b97e02755382b165b1bdf2af16d6815b/pkg/yqlib/operator_slice.go#L19-L50">pkg/yqlib/operator_slice.go</a></div>
+  <pre data-start="19" data-line="31,32,33,34,35,36,89,90,91,92,93,94,95,96,97"><code class="language-go">func sliceStringNode(lhsNode *CandidateNode, firstNumber int, secondNumber int) *CandidateNode {
+	runes := []rune(lhsNode.Value)
+	length := len(runes)
+
+	relativeFirstNumber := firstNumber
+	if relativeFirstNumber &lt; 0 {
+		relativeFirstNumber = length + firstNumber
+	}
+	if relativeFirstNumber &lt; 0 {
+		relativeFirstNumber = 0
+	}
+
+	relativeSecondNumber := secondNumber
+	if relativeSecondNumber &lt; 0 {
+		relativeSecondNumber = length + secondNumber
+	} else if relativeSecondNumber &gt; length {
+		relativeSecondNumber = length
+	}
+
+	log.Debugf("sliceStringNode: slice from %v to %v", relativeFirstNumber, relativeSecondNumber)
+
+	if relativeFirstNumber &gt; length {
+		relativeFirstNumber = length
+	}
+	if relativeSecondNumber &lt; relativeFirstNumber {
+		relativeSecondNumber = relativeFirstNumber
+	}
+
+	slicedString := string(runes[relativeFirstNumber:relativeSecondNumber])
+	replacement := lhsNode.CreateReplacement(ScalarNode, lhsNode.Tag, slicedString)
+	replacement.Style = lhsNode.Style
+	return replacement
+}</code></pre>
+
+  <p><span class="fix-label">Fix (diff):</span> Align the string path with the array path:</p>
+  <pre><code class="language-diff"> relativeSecondNumber := secondNumber
+ if relativeSecondNumber &lt; 0 {
+     relativeSecondNumber = length + secondNumber
+- } else if relativeSecondNumber &gt; length {
++ }
++ if relativeSecondNumber &lt; 0 {
++     relativeSecondNumber = 0
++ } else if relativeSecondNumber &gt; length {
+     relativeSecondNumber = length
+ }</code></pre>
+</div>
+
+<div class="card card-important">
+  <div class="finding-title" id="I3"><span class="finding-num">I3.</span> Missing test coverage for string edge cases tested for arrays <span class="pill pill-claude">Claude</span><span class="pill pill-codex">Codex</span> <a href="#I3" class="pilcrow">¶</a></div>
+
+  <p>The PR added array tests for very negative indices (<code>.[-100:]</code>, <code>.[:-100]</code>) but no corresponding string tests. Also missing: Unicode strings with implicit end index, empty string slicing, and non-string scalar slicing. (important, gap)</p>
+
+  <p>Untested scenarios ranked by risk:</p>
+  <ol>
+    <li>Unicode string with implicit end index (<code>.greeting[2:]</code> on <code>"héllo"</code>) — exercises the byte-vs-rune mismatch</li>
+    <li>Very negative string start (<code>.country[-100:]</code>) — tests clamping parity with arrays</li>
+    <li>Very negative string end (<code>.country[:-100]</code>) — tests clamping parity with arrays</li>
+    <li>Empty string slicing (<code>.val[0:5]</code> on <code>""</code>)</li>
+    <li>Non-string scalar slicing (<code>.value[0:2]</code> on <code>!!int</code>)</li>
+  </ol>
+
+  <p><span class="fix-label">Fix:</span> Add test scenarios with <code>skipDoc: true</code> for each of these cases.</p>
+</div>
+
+<div class="card card-important">
+  <div class="finding-title" id="I4"><span class="finding-num">I4.</span> Slicing non-string scalars produces invalid tagged output <span class="pill pill-claude">Claude</span> <a href="#I4" class="pilcrow">¶</a></div>
+
+  <p>When <code>.value[0:2]</code> targets a <code>!!int</code> scalar, the string guard correctly rejects it, but the code falls through to the array path. Since <code>Content</code> is nil for scalar nodes, the function returns an empty sequence tagged with the scalar's type (e.g., <code>!!int []</code>). (important, gap)</p>
+
+  <div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/341e2524b97e02755382b165b1bdf2af16d6815b/pkg/yqlib/operator_slice.go#L74-L78">pkg/yqlib/operator_slice.go</a></div>
+  <pre data-start="74" data-line="74,75,76,77"><code class="language-go">		if lhsNode.Kind == ScalarNode &amp;&amp; lhsNode.guessTagFromCustomType() == "!!str" {
+			results.PushBack(sliceStringNode(lhsNode, firstNumber, secondNumber))
+			continue
+		}
+		// ... falls through to array path for !!int, !!bool, !!float ...</code></pre>
+
+  <p><span class="fix-label">Fix:</span> Add an explicit guard before the array fallthrough:</p>
+  <pre><code class="language-diff"> if lhsNode.Kind == ScalarNode &amp;&amp; lhsNode.guessTagFromCustomType() == "!!str" {
+     results.PushBack(sliceStringNode(lhsNode, firstNumber, secondNumber))
+     continue
+ }
++if lhsNode.Kind == ScalarNode {
++    return Context{}, fmt.Errorf("cannot slice scalar of type %v, only arrays and strings can be sliced", lhsNode.Tag)
++}</code></pre>
+</div>
+
+<div class="card card-important">
+  <div class="finding-title" id="I5"><span class="finding-num">I5.</span> Slice index expressions evaluated against LHS instead of original context <span class="pill pill-gemini">Gemini</span> <a href="#I5" class="pilcrow">¶</a></div>
+
+  <p><code>sliceArrayOperator</code> uses <code>context</code> to evaluate index expressions via <code>getSliceNumber</code>. After the PR, <code>context</code> is <code>lhsContext</code> (the sliced node), not the original document context. For expressions like <code>.a[0:.max]</code>, <code>.max</code> is now evaluated against <code>.a</code> instead of the root — producing <code>"cannot index array with 'max'"</code>.</p>
+
+  <p>Before the PR, the same expression sliced the wrong target (root document instead of <code>.a</code>) — so this was never correct either. The PR fixed one half (correct target) without fixing the other (correct index context). (important, gap)</p>
+
+  <div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/341e2524b97e02755382b165b1bdf2af16d6815b/pkg/yqlib/operator_traverse_path.go#L81-L87">pkg/yqlib/operator_traverse_path.go</a></div>
+  <pre data-start="81" data-line="82,83,84,85,86"><code class="language-go">	if expressionNode.RHS != nil &amp;&amp; expressionNode.RHS.RHS != nil &amp;&amp; expressionNode.RHS.RHS.Operation.OperationType == createMapOpType {
+		lhsContext, err := d.GetMatchingNodes(context, expressionNode.LHS)
+		if err != nil {
+			return Context{}, err
+		}
+		return sliceArrayOperator(d, lhsContext, expressionNode.RHS.RHS)
+	}</code></pre>
+
+  <p><span class="fix-label">Fix:</span> Pass both the original context (for evaluating indices) and the LHS context (for providing nodes) to <code>sliceArrayOperator</code>. One approach: evaluate indices in <code>traverseArrayOperator</code> before calling <code>sliceArrayOperator</code>, then pass the resolved integers.</p>
+</div>
+
+<hr>
+
+<h2 id="suggestions" class="section-suggestion">Suggestions <a href="#suggestions" class="pilcrow">¶</a></h2>
+
+<div class="card card-suggestion">
+  <div class="finding-title" id="S1"><span class="finding-num">S1.</span> Commit structure needs cleanup before merge <span class="pill pill-claude">Claude</span> <a href="#S1" class="pilcrow">¶</a></div>
+
+  <p>The 5 commits include an empty "Initial plan" commit, a lint-fix commit, and a panic-fix commit that should all be squashed into the main feature commit before merging. <a href="https://github.com/mikefarah/yq/commit/778088d7"><code>778088d7</code></a> (Mike Farah's direct edit) can remain separate.</p>
+</div>
+
+<div class="card card-suggestion">
+  <div class="finding-title" id="S2"><span class="finding-num">S2.</span> Lexer <code>openCollect</code> change affects standalone <code>[: expr]</code> <span class="pill pill-claude">Claude</span><span class="pill pill-gemini">Gemini</span> <a href="#S2" class="pilcrow">¶</a></div>
+
+  <p>The added <code>openCollect</code> condition correctly enables <code>.field[:N]</code> but also fires on standalone <code>[</code> (array literal start). <code>[: "b"]</code> now silently produces <code>[{0: b}]</code> instead of an error. Unlikely to affect real users, but broadens accepted syntax unintentionally. (suggestion, gap)</p>
+
+  <div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/341e2524b97e02755382b165b1bdf2af16d6815b/pkg/yqlib/lexer.go#L127-L135">pkg/yqlib/lexer.go</a></div>
+  <pre data-start="127" data-line="130"><code class="language-go">	if tokenIsOpType(currentToken, createMapOpType) {
+		log.Debugf("tokenIsOpType: createMapOpType")
+		// check the previous token is '[', means we are slice, but dont have a first number
+		if index &gt; 0 &amp;&amp; (tokens[index-1].TokenType == traverseArrayCollect || tokens[index-1].TokenType == openCollect) {
+			log.Debugf("previous token is : traverseArrayOpType")
+			// need to put the number 0 before this token, as that is implied
+			postProcessedTokens = append(postProcessedTokens, &amp;token{TokenType: operationToken, Operation: createValueOperation(0, "0")})
+		}
+	}</code></pre>
+
+  <p><span class="fix-label">Fix:</span> Tighten the condition to require that <code>openCollect</code> follows a traversal token.</p>
+</div>
+
+<div class="card card-suggestion">
+  <div class="finding-title" id="S3"><span class="finding-num">S3.</span> Doc header "Splice" misleading for strings <span class="pill pill-claude">Claude</span> <a href="#S3" class="pilcrow">¶</a></div>
+
+  <p>The header was updated from "Slice/Splice Array" to "Slice/Splice Array or String". "Splice" implies in-place mutation, which is not supported for strings. Consider "Slice Array or String" instead.</p>
+</div>
+
+<div class="card card-suggestion">
+  <div class="finding-title" id="S4"><span class="finding-num">S4.</span> Documentation uses only ASCII examples <span class="pill pill-claude">Claude</span> <a href="#S4" class="pilcrow">¶</a></div>
+
+  <p>All four string slicing doc sections use <code>country: Australia</code> (ASCII-only). Since the feature's distinguishing value is rune-based Unicode handling, one documented example with a multibyte string would demonstrate this.</p>
+</div>
+
+<hr>
+
+<h2 id="design-observations" class="section-design">Design Observations <a href="#design-observations" class="pilcrow">¶</a></h2>
+
+<div class="card card-design">
+  <h3 id="concerns">Concerns <a href="#concerns" class="pilcrow">¶</a></h3>
+  <ul>
+    <li>The string/array type dispatch at <a href="https://github.com/mikefarah/yq/blob/341e2524b97e02755382b165b1bdf2af16d6815b/pkg/yqlib/operator_slice.go#L74"><code>operator_slice.go:74</code></a> uses a "check-and-continue" pattern that leaves all non-<code>!!str</code> scalar types falling silently into array logic. Every new scalar type yq supports in the future will produce invalid output. A guard-and-error before the array path (I4) would make the function fail-safe by default. <span class="pill pill-claude">Claude</span> (in-scope)</li>
+    <li>The <code>length</code> operator returns byte count for strings while the new slicing uses rune count. This semantic split means users cannot predict which convention a given string operator uses. Fixing <code>length</code> and <code>match</code> offsets to use runes as part of this PR would make string operations coherent. Deferring the fix means every new string operator must decide "bytes or runes?" independently. <span class="pill pill-claude">Claude</span><span class="pill pill-gemini">Gemini</span> (in-scope)</li>
+    <li>Duplicated index-normalisation logic between <code>sliceStringNode</code> and the array path in <code>sliceArrayOperator</code> invites divergence. A shared <code>normalizeSliceIndices(first, second, length int) (int, int)</code> helper would eliminate the inconsistency. <span class="pill pill-claude">Claude</span> (in-scope)</li>
+  </ul>
+
+  <h3 id="strengths">Strengths <a href="#strengths" class="pilcrow">¶</a></h3>
+  <ul>
+    <li>Using <code>[]rune</code> for string slicing correctly handles Unicode. This aligns with jq's character-based string indexing.</li>
+    <li>The <code>traverseArrayOperator</code> fix (evaluating LHS before calling <code>sliceArrayOperator</code>) solves the root cause of <code>.field[N:M]</code> operating on the wrong node.</li>
+    <li>The lexer change (adding <code>openCollect</code> to the implicit-0 check) is well-scoped and necessary for <code>.field[:N]</code> syntax.</li>
+    <li><code>CreateReplacement</code> preserves the original scalar's tag and style, avoiding quoting/formatting surprises.</li>
+  </ul>
+</div>
+
+<hr>
+
+<h2 id="testing-assessment">Testing Assessment <a href="#testing-assessment" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+  <p>Test coverage for core string slicing (both ends, negative indices, out-of-bounds, Unicode, full-string <code>[:]</code>) is solid. Gaps ranked by risk:</p>
+  <ol>
+    <li>Unicode string with implicit end index (<code>.greeting[2:]</code>) — exercises byte-vs-rune mismatch path</li>
+    <li>Non-string scalar slicing (<code>.value[0:2]</code> on <code>!!int</code>) — produces invalid output (I4)</li>
+    <li>Very negative string indices (<code>.country[-100:]</code>, <code>.country[:-100]</code>) — tests clamping parity</li>
+    <li>Empty string slicing — boundary condition for zero-length rune slices</li>
+    <li>Expression-based slice bounds (<code>.a[0:.max]</code>) — exercises the context evaluation issue (I5)</li>
+  </ol>
+</div>
+
+<hr>
+
+<h2 id="documentation-assessment">Documentation Assessment <a href="#documentation-assessment" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+  <p>The generated <code>slice-array.md</code> documentation correctly demonstrates string slicing examples. The header update to "Slice/Splice Array or String" is accurate for slicing but misleading for the "Splice" part regarding strings (S3). All examples use ASCII-only strings (S4).</p>
+</div>
+
+<hr>
+
+<h2 id="commit-structure">Commit Structure <a href="#commit-structure" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+  <ul>
+    <li><a href="https://github.com/mikefarah/yq/commit/26929879"><code>26929879</code></a> Initial plan — empty commit with no file changes; should be dropped.</li>
+    <li><a href="https://github.com/mikefarah/yq/commit/9a9399ad"><code>9a9399ad</code></a> — fixes lint error and test mistakes from the main feature commit; should be squashed into <a href="https://github.com/mikefarah/yq/commit/6d345ac7"><code>6d345ac7</code></a>.</li>
+    <li><a href="https://github.com/mikefarah/yq/commit/341e2524b97e02755382b165b1bdf2af16d6815b"><code>341e2524</code></a> — fixes panic from the main feature commit; should be squashed into <a href="https://github.com/mikefarah/yq/commit/6d345ac7"><code>6d345ac7</code></a>.</li>
+    <li><a href="https://github.com/mikefarah/yq/commit/778088d7"><code>778088d7</code></a> — Mike Farah's direct edit (tag/style preservation); reasonable as a separate commit.</li>
+  </ul>
+</div>
+
+<hr>
+
+<h2 id="agent-performance-retro">Agent Performance Retro <a href="#agent-performance-retro" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+  <h3 id="claude-retro"><span class="pill pill-claude">Claude</span> Opus 4.6 <a href="#claude-retro" class="pilcrow">¶</a></h3>
+  <p>Claude produced the most findings across all three passes and demonstrated the deepest analysis. In pass 1, it identified the byte-vs-rune length mismatch (I1), the inconsistent clamping logic (I2), and the test coverage gaps (I3). In pass 2, it found the non-string scalar fallthrough (I4) and the lexer side-effect (S2). In pass 3, it deepened I1 with concrete reproduction cases showing that the mismatch produces wrong output (not just a theoretical concern), and added documentation suggestions (S4).</p>
+  <p>Claude ran <code>git blame</code> 4 times in pass 1 to verify regression classification. It read 10 files and used Grep 7 times to trace call sites, demonstrating thorough cross-file analysis.</p>
+  <p><strong>Follow-up pass performance:</strong> Pass 2 produced 1 important + 2 suggestions (all new). Pass 3 produced 1 important (restated with stronger evidence) + 2 suggestions (new). Pass 3's key contribution was proving I1 causes real data corruption, not just a theoretical concern.</p>
+
+  <h3 id="codex-retro"><span class="pill pill-codex">Codex</span> GPT 5.4 <a href="#codex-retro" class="pilcrow">¶</a></h3>
+  <p>Codex found no issues at any severity level. It reviewed all 7 files and concluded "no correctness regressions in the shipped changes." Its testing assessment correctly noted the Unicode implicit-end gap and expression-valued bounds gap, but it did not promote these to findings. Codex ran 40 tool calls but relied heavily on <code>nl</code> (12 calls) and <code>printf</code> (10) for file reading rather than targeted analysis. It ran <code>git blame</code> only once.</p>
+  <p><strong>Coverage miss:</strong> Codex marked <code>operator_slice.go</code> as "Reviewed, no issues" — but Claude and Gemini both found important issues there (I1, I2, I4). Dropped after pass 1 (0 findings).</p>
+
+  <h3 id="gemini-retro"><span class="pill pill-gemini">Gemini</span> 3.1 Pro <a href="#gemini-retro" class="pilcrow">¶</a></h3>
+  <p>Gemini found the byte-vs-rune length mismatch (I1, shared with Claude) and the clamping inconsistency (S1, shared with Claude at different severity) in pass 1. In pass 2, it identified the context evaluation issue (I5) and independently found the lexer side-effect (S2, shared with Claude). Pass 3 explored operator interactions (assignment, deletion, maps, null indices) but these were pre-existing gaps outside the PR scope.</p>
+  <p>Gemini never ran <code>git blame</code> (known limitation due to quota constraints). It made 37 tool calls in pass 1, focusing on <code>grep_search</code> (9) and shell commands (23).</p>
+  <p><strong>Follow-up pass performance:</strong> Pass 2 produced 1 critical (downgraded to I5) + 1 important (deduplicated to S2). Pass 3 produced 4 importants, but 1 was a duplicate and the rest were pre-existing gaps — downgraded to suggestions or dropped during consolidation.</p>
+
+  <h3 id="tool-call-highlights">Tool Call Highlights <a href="#tool-call-highlights" class="pilcrow">¶</a></h3>
+  <ul>
+    <li><span class="pill pill-claude">Claude</span> ran <code>git blame</code> consistently (4 times P1, 3 times P2, 5 times P3) — the only agent to systematically verify regression classification.</li>
+    <li><span class="pill pill-codex">Codex</span> never searched code with grep/rg — it relied entirely on sequential file reading, which may explain why it missed cross-file issues like the <code>length</code> operator inconsistency.</li>
+    <li><span class="pill pill-gemini">Gemini</span> never ran <code>git blame</code> (known quota limitation). In pass 3, it used 72 tool calls — the highest of any agent/pass — but most findings were pre-existing gaps.</li>
+  </ul>
+
+  <h3 id="summary">Summary <a href="#summary" class="pilcrow">¶</a></h3>
+
+  <table class="retro-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th><span class="pill pill-claude">Claude</span> Opus 4.6</th>
+        <th><span class="pill pill-codex">Codex</span> GPT 5.4</th>
+        <th><span class="pill pill-gemini">Gemini</span> 3.1 Pro</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Duration (pass 1)</td><td>462s</td><td>217s</td><td>470s</td></tr>
+      <tr><td>Findings (pass 1)</td><td>0C 3I 1S</td><td>0C 0I 0S</td><td>0C 1I 1S</td></tr>
+      <tr><td>Tool calls (pass 1)</td><td>24 (Read 10, Grep 7)</td><td>40 (exec 33, write 7)</td><td>37 (shell 23, grep 9)</td></tr>
+      <tr><td>Duration (pass 2)</td><td>781s</td><td>—</td><td>484s</td></tr>
+      <tr><td>Findings (pass 2)</td><td>0C 1I 2S</td><td>—</td><td>0C 1I 0S + 1 dup</td></tr>
+      <tr><td>Tool calls (pass 2)</td><td>58</td><td>—</td><td>49</td></tr>
+      <tr><td>Duration (pass 3)</td><td>895s</td><td>—</td><td>623s</td></tr>
+      <tr><td>Findings (pass 3)</td><td>0C 0I 2S + 1 restated</td><td>—</td><td>0C 0I 0S + 3 dropped + 1 dup</td></tr>
+      <tr><td>Tool calls (pass 3)</td><td>69</td><td>—</td><td>72</td></tr>
+      <tr><td><strong>Totals</strong></td><td>0C 4I 5S</td><td>0C 0I 0S</td><td>0C 2I 1S</td></tr>
+      <tr><td>Design observations</td><td>3 concerns, 4 strengths</td><td>0 concerns, 3 strengths</td><td>1 concern, 2 strengths</td></tr>
+      <tr><td>False positives</td><td>0</td><td>0</td><td>0</td></tr>
+      <tr><td>Unique insights</td><td>I2, I3, I4, S1, S3, S4</td><td>0</td><td>I5</td></tr>
+      <tr><td>Files reviewed</td><td>7</td><td>7</td><td>7</td></tr>
+      <tr><td>Coverage misses</td><td>0</td><td>1 (operator_slice.go)</td><td>0</td></tr>
+      <tr><td>Downgraded</td><td>0</td><td>0</td><td>1 (C→I: context evaluation)</td></tr>
+      <tr><td>Dropped</td><td>0</td><td>0</td><td>4 (pass 3 pre-existing gaps)</td></tr>
+      <tr><td>Severity inflation</td><td>0</td><td>0</td><td>1 (C1 pass 2)</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Reconciliation:</strong> Gemini P2 C1 (context evaluation): critical → important I5 (pre-existing limitation, not a regression — old code also didn't handle this case correctly). Gemini P3 I1 (splice assignment): dropped (pre-existing "Splice" feature never existed, already covered by S3). Gemini P3 I2 (del on slice): dropped (pre-existing behaviour unchanged by this PR). Gemini P3 I3 (slicing maps): dropped (duplicate of I4 non-string scalar handling). Gemini P3 I4 (null indices): dropped (pre-existing gap, not related to this change).</p>
+
+  <p>Claude provided the most value overall, identifying 4 of 5 important findings and all 4 suggestions. Gemini's unique contribution was I5 (context evaluation). Codex provided no actionable findings.</p>
+</div>
+
+<hr>
+
+<h2 id="review-process-notes">Review Process Notes <a href="#review-process-notes" class="pilcrow">¶</a></h2>
+
+<div class="card card-neutral">
+  <h3 id="repo-context-updates">Repo Context Updates <a href="#repo-context-updates" class="pilcrow">¶</a></h3>
+  <ul>
+    <li>yq's <code>length</code> operator returns byte count for strings (<code>len(candidate.Value)</code>), not rune/character count. String slicing uses rune count. Future reviews of string-related operators should check for byte-vs-rune consistency.</li>
+  </ul>
+</div>
+
+</main>
+<script>window.Prism = window.Prism || {}; Prism.manual = true;</script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-go.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-diff.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-yaml.min.js"></script>
+<script>
+/* Deep Review — Prism initialization and line-number wrapping.
+ * Inlined into each generated HTML file by the beautify-review skill.
+ * Runs synchronously at the end of <body> — no event listeners.
+ *
+ * Prerequisite: a preceding <script> must set Prism.manual = true
+ * before the Prism core <script> loads.
+ */
+
+Prism.highlightAll();
+
+document.querySelectorAll('pre[data-start]').forEach(function(pre) {
+  var startLine = parseInt(pre.getAttribute('data-start'), 10) || 1;
+  var hlAttr = pre.getAttribute('data-line') || '';
+
+  /* Parse data-line into a Set of line numbers to highlight.
+   * Accepts comma-separated values: "75,76,77" or ranges: "75-84". */
+  var hlLines = new Set();
+  hlAttr.split(',').forEach(function(part) {
+    part = part.trim();
+    if (!part) return;
+    var m = part.match(/^(\d+)-(\d+)$/);
+    if (m) {
+      for (var i = parseInt(m[1], 10); i <= parseInt(m[2], 10); i++) hlLines.add(i);
+    } else {
+      hlLines.add(parseInt(part, 10));
+    }
+  });
+
+  var code = pre.querySelector('code');
+  if (!code) return;
+
+  var html = code.innerHTML;
+  var lines = html.split('\n');
+  /* Strip a trailing empty line that Prism sometimes leaves. */
+  if (lines.length > 0 && lines[lines.length - 1].trim() === '') lines.pop();
+
+  var wrapped = lines.map(function(line, idx) {
+    var lineNum = startLine + idx;
+    var cls = 'code-line' + (hlLines.has(lineNum) ? ' line-hl' : '');
+    return '<span class="' + cls + '">' + line + '</span>';
+  });
+
+  /* Join with '' (empty string) — NOT '\n'.
+   * Inside <pre>, newlines are literal whitespace. Since .code-line uses
+   * display: block, joining with '\n' produces double line spacing. */
+  code.innerHTML = wrapped.join('');
+  pre.style.counterReset = 'line ' + (startLine - 1);
+});
+
+/* GitHub reference tooltips — show title and state on hover for #N links.
+ * Links must have class="gh-ref" and data-title set by the generator. */
+document.querySelectorAll('a.gh-ref[data-title]').forEach(function(link) {
+  var tip = null;
+
+  link.addEventListener('mouseenter', function() {
+    if (tip) return;
+    tip = document.createElement('div');
+    tip.className = 'gh-tooltip';
+
+    var state = link.getAttribute('data-state') || '';
+    var type = link.getAttribute('data-type') || 'issue';
+    var label = state.charAt(0).toUpperCase() + state.slice(1).toLowerCase();
+
+    var pill = document.createElement('span');
+    pill.className = 'gh-tooltip-state gh-state-' + state;
+    pill.textContent = label + (type === 'pr' ? ' PR' : '');
+
+    var title = document.createElement('span');
+    title.className = 'gh-tooltip-title';
+    title.textContent = link.getAttribute('data-title');
+
+    tip.appendChild(pill);
+    tip.appendChild(title);
+    document.body.appendChild(tip);
+
+    var rect = link.getBoundingClientRect();
+    var tw = tip.offsetWidth;
+    var th = tip.offsetHeight;
+    var left = rect.left + window.scrollX;
+    var top = rect.top + window.scrollY - th - 8;
+
+    if (left + tw > window.innerWidth - 12) left = window.innerWidth - tw - 12;
+    if (left < 4) left = 4;
+    if (top < window.scrollY + 4) top = rect.bottom + window.scrollY + 8;
+
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+    tip.style.opacity = '1';
+  });
+
+  link.addEventListener('mouseleave', function() {
+    if (tip) { tip.remove(); tip = null; }
+  });
+});
+</script>
+</body>
+</html>
