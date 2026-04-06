@@ -446,8 +446,8 @@ import (
 
 <p>The stderr buffer is checked only when <code>cmd.Output()</code> returns an error. Commands that succeed with warnings on stderr have those warnings silently discarded.</p>
 
-<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L125-L135">pkg/yqlib/operator_system.go</a></div>
-<pre class="language-go" data-start="125" data-line="129-134"><code>		cmd.Stderr = &amp;stderr
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L126-L135">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="126" data-line="129-134"><code>		cmd.Stderr = &amp;stderr
 
 		output, err := cmd.Output()
 		if err != nil {
@@ -543,8 +543,8 @@ import (
 
 <p>The same 3-line pattern for building <code>flagsPrefix</code> appears in both branches of <code>documentInput</code>. Hoist above the if/else.</p>
 
-<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operators_test.go#L360-L374">pkg/yqlib/operators_test.go</a></div>
-<pre class="language-go" data-start="360" data-line="361-362,371-372"><code>		writeOrPanic(w, "then\n")
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operators_test.go#L358-L374">pkg/yqlib/operators_test.go</a></div>
+<pre class="language-go" data-start="358" data-line="360-363,371-374"><code>		writeOrPanic(w, "then\n")
 
 		flagsPrefix := ""
 		if s.yqFlags != "" {
