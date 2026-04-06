@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deep Review: 20260406-103045-pr-2640</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+  <style>
+/* Deep Review — canonical stylesheet
+ * Inlined into each generated HTML file by the beautify-review skill.
+ * Edit this file to change the look of all future reviews.
+ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  color: #1f2937;
+  background: #f8f9fb;
+  margin: 0;
+  padding: 2rem 1rem;
+}
+main { max-width: 900px; margin: 0 auto; }
+h1 { font-size: 1.6rem; margin-bottom: 0.5rem; color: #111827; }
+h2 { font-size: 1.35rem; margin-top: 2.5rem; margin-bottom: 1rem; color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.4rem; }
+h3 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.8rem; }
+hr { border: none; border-top: 2px solid #e5e7eb; margin: 2rem 0; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: "SF Mono", "Fira Code", "Fira Mono", Menlo, Consolas, monospace; font-size: 0.85em; background: #f3f4f6; padding: 0.15em 0.35em; border-radius: 4px; }
+
+/* Code blocks — override Prism defaults */
+pre { margin: 0 !important; border-radius: 0 0 8px 8px !important; }
+pre[class*="language-"] { font-size: 0.78rem; line-height: 1.3; }
+pre code { background: none; padding: 0; }
+
+/* Report metadata table */
+.meta-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+.meta-table td { padding: 0.35rem 0.6rem; border: 1px solid #e5e7eb; vertical-align: top; }
+.meta-table td:first-child { font-weight: 600; width: 140px; background: #f9fafb; white-space: nowrap; }
+
+/* Cards — every section and finding lives in a card */
+.card { border-radius: 10px; padding: 1.2rem 1.4rem; margin-bottom: 1.2rem; }
+.card-neutral { background: #f1f3f5; border: 1px solid #d5d9e0; }
+.card-critical { background: #ffeef0; border: 1px solid #f5c6cb; }
+.card-important { background: #fff0e0; border: 1px solid #f5d9a8; }
+.card-suggestion { background: #f0f6ff; border: 1px solid #c7d9f5; }
+.card-design { background: #f0faf4; border: 1px solid #b7e4c7; }
+
+/* Severity section headings — colored to match their cards */
+.section-critical { color: #9b1c1c; }
+.section-important { color: #92400e; }
+.section-suggestion { color: #1e40af; }
+.section-design { color: #065f46; }
+
+/* Agent attribution pills */
+.pill { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 0.15em 0.55em; border-radius: 999px; margin-right: 0.3em; vertical-align: middle; letter-spacing: 0.01em; }
+.pill-claude { background: #e9d5ff; color: #6b21a8; }
+.pill-codex { background: #d1fae5; color: #065f46; }
+.pill-gemini { background: #ffe4e6; color: #9f1239; }
+
+/* Finding titles */
+.finding-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.6rem; line-height: 1.4; }
+.finding-num { font-weight: 800; }
+
+/* Code file header — dark bar above each source code block.
+ * The filename is a GitHub permalink to the displayed line range.
+ * Text color is light gray (#adbac7) for the bar, green (#7ee787)
+ * for the hyperlink — matching GitHub's dark-mode file header. */
+.code-file-header { background: #2d333b; color: #adbac7; font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace; font-size: 0.75rem; padding: 0.4rem 0.9rem; border-radius: 8px 8px 0 0; margin-top: 0.8rem; }
+.code-file-header a { color: #7ee787; }
+.code-file-header a:hover { text-decoration: underline; }
+
+/* Line numbers (CSS counters) and line highlighting */
+.code-line { display: block; }
+.code-line::before {
+  content: counter(line);
+  counter-increment: line;
+  display: inline-block;
+  width: 3em;
+  margin-right: 0.8em;
+  padding-right: 0.5em;
+  text-align: right;
+  color: #636e7b;
+  border-right: 1px solid #3d4556;
+  user-select: none;
+}
+.line-hl { background: rgba(255, 199, 0, 0.18); }
+
+/* Pilcrow anchor links — hidden until parent is hovered */
+.pilcrow { color: #d1d5db; text-decoration: none; font-weight: 400; margin-left: 0.4em; opacity: 0; transition: opacity 0.15s; }
+h2:hover .pilcrow, h3:hover .pilcrow, .finding-title:hover .pilcrow { opacity: 1; }
+.pilcrow:hover { color: #6b7280; text-decoration: none; }
+
+/* Fix label */
+.fix-label { font-weight: 700; }
+
+/* Agent retro summary table */
+.retro-table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.9rem; table-layout: fixed; }
+.retro-table th, .retro-table td { padding: 0.45rem 0.7rem; border: 1px solid #e5e7eb; text-align: left; }
+.retro-table th { background: #f3f4f6; font-weight: 600; }
+.retro-table tr:nth-child(even) { background: #f9fafb; }
+
+/* Lists and paragraphs inside cards */
+.card ul, .card ol { margin: 0.4rem 0; padding-left: 1.5rem; }
+.card li { margin-bottom: 0.3rem; }
+.card p { margin: 0.5rem 0; }
+.card p:first-child { margin-top: 0; }
+
+/* Verdict highlight in metadata table */
+.verdict { font-weight: 700; }
+
+/* GitHub reference tooltips — shown on hover for #N links */
+.gh-tooltip {
+  position: absolute;
+  background: #1f2328;
+  color: #e6edf3;
+  padding: 0.55em 0.75em;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  max-width: 380px;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.28);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.gh-tooltip-state {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15em 0.5em;
+  border-radius: 999px;
+  margin-right: 0.4em;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+.gh-state-open { background: #238636; color: #fff; }
+.gh-state-closed { background: #848d97; color: #fff; }
+.gh-state-merged { background: #8957e5; color: #fff; }
+.gh-tooltip-title { vertical-align: baseline; }
+
+/* Mobile */
+@media (max-width: 640px) {
+  body { padding: 1rem 0.5rem; }
+  .card { padding: 0.9rem 1rem; }
+  pre code { font-size: 0.72rem; }
+}
+  </style>
+</head>
+<body>
+  <main>
+
+<h1 id="title">Deep Review: 20260406-103045-pr-2640 <a class="pilcrow" href="#title">¶</a></h1>
+
+<table class="meta-table">
+<tr><td>Date</td><td>2026-04-06 10:30</td></tr>
+<tr><td>Repo</td><td><a href="https://github.com/mikefarah/yq">mikefarah/yq</a></td></tr>
+<tr><td>Round</td><td>1</td></tr>
+<tr><td>Mode</td><td>Thorough (4 passes)</td></tr>
+<tr><td>Author</td><td>@copilot-swe-agent</td></tr>
+<tr><td>PR</td><td><a href="https://github.com/mikefarah/yq/pull/2640" class="gh-ref" data-title="Add system(command; args) operator (disabled by default)" data-state="open" data-type="pr">#2640</a> — Add system(command; args) operator (disabled by default)</td></tr>
+<tr><td>Branch</td><td><code>copilot/add-system-command-operator</code></td></tr>
+<tr><td>Commits</td><td><a href="https://github.com/mikefarah/yq/commit/6f94991c"><code>6f94991c</code></a> Apply suggestions from code review<br><a href="https://github.com/mikefarah/yq/commit/b3b44788"><code>b3b44788</code></a> Remove deprecated --enable-system-operator alias<br><a href="https://github.com/mikefarah/yq/commit/e10e8127"><code>e10e8127</code></a> Apply suggestions from code review<br><a href="https://github.com/mikefarah/yq/commit/53abbbae"><code>53abbbae</code></a> Validate command node type and handle multiple results<br><a href="https://github.com/mikefarah/yq/commit/5ea069a5"><code>5ea069a5</code></a> Update system-operators.md<br><a href="https://github.com/mikefarah/yq/commit/2c8605f6"><code>2c8605f6</code></a> Update headers/system-operators.md<br><a href="https://github.com/mikefarah/yq/commit/884c2d8b"><code>884c2d8b</code></a> Add yqFlags to expressionScenario; fix system op docs<br><a href="https://github.com/mikefarah/yq/commit/da611f7a"><code>da611f7a</code></a> Evaluate system command/args per matched node<br><a href="https://github.com/mikefarah/yq/commit/6315cfe9"><code>6315cfe9</code></a> Update operator_system.go<br><a href="https://github.com/mikefarah/yq/commit/9a72c0f7"><code>9a72c0f7</code></a> Add system(command; args) operator<br><a href="https://github.com/mikefarah/yq/commit/d181cf87"><code>d181cf87</code></a> Initial plan</td></tr>
+<tr><td>Reviewers</td><td><span class="pill pill-claude">Claude</span> Opus 4.6, <span class="pill pill-codex">Codex</span> GPT 5.4, <span class="pill pill-gemini">Gemini</span> 3.1 Pro</td></tr>
+<tr><td>Verdict</td><td><span class="verdict">Merge with fixes</span> — address I1 (silent null on disabled) and I4 (misleading docs) before merge; remaining items can follow</td></tr>
+<tr><td>Wall-clock time</td><td><code>96 min 32 s</code></td></tr>
+</table>
+
+<hr>
+
+<h2 id="executive-summary">Executive Summary <a class="pilcrow" href="#executive-summary">¶</a></h2>
+
+<div class="card card-neutral">
+<p>This PR adds a <code>system</code> operator that executes external commands from yq expressions, gated behind <code>--security-enable-system-operator</code>. The implementation follows established yq patterns: <code>simpleOp</code> registration, <code>blockOpType</code> for optional arguments, <code>SingleReadonlyChildContext</code> for per-node evaluation, and <code>exec.Command</code> (no shell) to avoid injection. The main concerns are the silent-null behaviour when disabled (inconsistent with how env/file operators fail hard) and misleading documentation about semicolon-separated arguments.</p>
+</div>
+
+<hr>
+
+<h2 id="critical-issues" class="section-critical">Critical Issues <a class="pilcrow" href="#critical-issues">¶</a></h2>
+
+<div class="card card-neutral">
+<p>None.</p>
+</div>
+
+<hr>
+
+<h2 id="important-issues" class="section-important">Important Issues <a class="pilcrow" href="#important-issues">¶</a></h2>
+
+<!-- I1 -->
+<div class="card card-important">
+<div class="finding-title" id="I1"><span class="finding-num">I1.</span> Disabled mode silently injects nulls instead of erroring (important, regression) <span class="pill pill-claude">Claude</span> <span class="pill pill-gemini">Gemini</span> <a class="pilcrow" href="#I1">¶</a></div>
+
+<p>When the system operator is disabled (the default), it returns <code>null</code> per matched node with only a warning on stderr. The existing env and file operators return <strong>errors</strong> when their security gates are active (<a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_env.go#L20-L22"><code>operator_env.go:20-22</code></a>, <a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_load.go#L66-L68"><code>operator_load.go:66-68</code></a>). In a pipeline like <code>yq '.field = system("cmd")' file.yml | kubectl apply -f -</code>, a user who forgets the flag gets null values silently embedded in output with exit code 0. The warning goes to stderr, which pipelines routinely discard.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L63-L72">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="63" data-line="64-71"><code>func systemOperator(d *dataTreeNavigator, context Context, expressionNode *ExpressionNode) (Context, error) {
+	if !ConfiguredSecurityPreferences.EnableSystemOps {
+		log.Warning("system operator is disabled, use --security-enable-system-operator flag to enable")
+		results := list.New()
+		for el := context.MatchingNodes.Front(); el != nil; el = el.Next() {
+			candidate := el.Value.(*CandidateNode)
+			results.PushBack(candidate.CreateReplacement(ScalarNode, "!!null", "null"))
+		}
+		return context.ChildContext(results), nil
+	}</code></pre>
+
+<p><span class="fix-label">Fix:</span> Return an error, matching the codebase convention:</p>
+
+<pre class="language-diff"><code> if !ConfiguredSecurityPreferences.EnableSystemOps {
+-    log.Warning("system operator is disabled, use --security-enable-system-operator flag to enable")
+-    results := list.New()
+-    for el := context.MatchingNodes.Front(); el != nil; el = el.Next() {
+-        candidate := el.Value.(*CandidateNode)
+-        results.PushBack(candidate.CreateReplacement(ScalarNode, "!!null", "null"))
+-    }
+-    return context.ChildContext(results), nil
++    return Context{}, fmt.Errorf("system operations are disabled, use --security-enable-system-operator to enable")
+ }</code></pre>
+
+<p>If the null-return behaviour is intentional, document the divergence from the env/file pattern in a code comment.</p>
+</div>
+
+<!-- I2 -->
+<div class="card card-important">
+<div class="finding-title" id="I2"><span class="finding-num">I2.</span> Multi-result arg expressions silently truncated to first match (important, regression) <span class="pill pill-claude">Claude</span> <span class="pill pill-codex">Codex</span> <span class="pill pill-gemini">Gemini</span> <a class="pilcrow" href="#I2">¶</a></div>
+
+<p>When the args expression produces multiple results (e.g. <code>system("echo"; .args[])</code> on <code>{"args":["a","b"]}</code>), only the first result is used; the rest are silently dropped. The command side (<a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L50-L51"><code>resolveCommandNode</code> at line 50-51</a>) logs a debug message for multiple results, but the args side does not. A user writing <code>system("cmd"; .items[])</code> gets only the first item with no indication that the rest were dropped.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L101-L103">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="101" data-line="101-103"><code>			if argsNodes.MatchingNodes.Front() != nil {
+				args = resolveSystemArgs(argsNodes.MatchingNodes.Front().Value.(*CandidateNode))
+			}</code></pre>
+
+<p><span class="fix-label">Fix:</span> Add a debug log matching the command-resolution pattern, or flatten all matching arg nodes into argv:</p>
+
+<pre class="language-diff"><code>+if argsNodes.MatchingNodes.Len() &gt; 1 {
++    log.Debugf("system operator: args expression returned %d results, using first", argsNodes.MatchingNodes.Len())
++}
+ if argsNodes.MatchingNodes.Front() != nil {
+     args = resolveSystemArgs(argsNodes.MatchingNodes.Front().Value.(*CandidateNode))
+ }</code></pre>
+</div>
+
+<!-- I3 -->
+<div class="card card-important">
+<div class="finding-title" id="I3"><span class="finding-num">I3.</span> Command validation accepts non-string scalars (important, regression) <span class="pill pill-codex">Codex</span> <a class="pilcrow" href="#I3">¶</a></div>
+
+<p>The check rejects <code>!!null</code> and non-scalars but allows <code>!!int</code>, <code>!!bool</code>, and other scalar tags through. <code>system(123)</code> tries to exec "123" rather than failing validation, contradicting both the error text and the documented contract. In practice the OS returns a "not found" error, but the validation should catch this before reaching exec.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L53-L56">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="53" data-line="54-55"><code>	cmdNode := commandNodes.MatchingNodes.Front().Value.(*CandidateNode)
+	if cmdNode.Kind != ScalarNode || cmdNode.Tag == "!!null" {
+		return "", fmt.Errorf("system operator: command must be a string scalar")
+	}</code></pre>
+
+<p><span class="fix-label">Fix:</span> Check the tag explicitly:</p>
+
+<pre class="language-diff"><code>-if cmdNode.Kind != ScalarNode || cmdNode.Tag == "!!null" {
++if cmdNode.Kind != ScalarNode || cmdNode.guessTagFromCustomType() != "!!str" {
+    return "", fmt.Errorf("system operator: command must be a string scalar")
+ }</code></pre>
+</div>
+
+<!-- I4 -->
+<div class="card card-important">
+<div class="finding-title" id="I4"><span class="finding-num">I4.</span> Misleading documentation about semicolons for multiple args (important, regression) <span class="pill pill-gemini">Gemini</span> <a class="pilcrow" href="#I4">¶</a></div>
+
+<p>This suggests multiple arguments can be semicolon-separated: <code>system("cmd"; "arg1"; "arg2")</code>. In yq, <code>;</code> is the block operator, which evaluates expressions sequentially and yields the right-hand result. Writing <code>system("cmd"; "arg1"; "arg2")</code> silently drops <code>"arg1"</code> and passes only <code>"arg2"</code>. Multiple arguments require an array: <code>system("cmd"; ["arg1", "arg2"])</code>.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/doc/operators/headers/system-operators.md#L15">pkg/yqlib/doc/operators/headers/system-operators.md</a></div>
+<pre class="language-markdown" data-start="14" data-line="15"><code>- A command string (required)
+- An argument or array of arguments separated by `;` (optional)</code></pre>
+
+<p><span class="fix-label">Fix:</span></p>
+
+<pre class="language-diff"><code>-- An argument or array of arguments separated by `;` (optional)
++- An argument (or an array of arguments), separated from the command by `;` (optional)</code></pre>
+</div>
+
+<!-- I5 -->
+<div class="card card-important">
+<div class="finding-title" id="I5"><span class="finding-num">I5.</span> Argument resolution silently ignores invalid node types (important, regression) <span class="pill pill-gemini">Gemini</span> <a class="pilcrow" href="#I5">¶</a></div>
+
+<p>When a sequence argument contains a non-scalar or null element, <code>resolveSystemArgs</code> logs a warning and skips it. Silently dropping command arguments alters execution: <code>system("rm"; ["-rf", {bad: node}])</code> resolves to <code>rm -rf</code>, losing the invalid node without halting.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L23-L27">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="23" data-line="23-26"><code>			if child.Kind != ScalarNode || child.Tag == "!!null" {
+				log.Warningf("system operator: argument must be a non-null scalar; got kind=%v tag=%v - ignoring", child.Kind, child.Tag)
+				continue
+			}</code></pre>
+
+<p><span class="fix-label">Fix:</span> Return an error instead of continuing:</p>
+
+<pre class="language-diff"><code> if child.Kind != ScalarNode || child.Tag == "!!null" {
+-    log.Warningf("system operator: argument must be a non-null scalar; got kind=%v tag=%v - ignoring", child.Kind, child.Tag)
+-    continue
++    return nil, fmt.Errorf("system operator: argument must be a non-null scalar; got kind=%v tag=%v", child.Kind, child.Tag)
+ }</code></pre>
+
+<p>This requires changing <code>resolveSystemArgs</code> to return <code>([]string, error)</code> and updating its callers.</p>
+</div>
+
+<!-- I6 -->
+<div class="card card-important">
+<div class="finding-title" id="I6"><span class="finding-num">I6.</span> system operator subsumes env/file security restrictions — undocumented (important, gap) <span class="pill pill-claude">Claude</span> (pass 2) <a class="pilcrow" href="#I6">¶</a></div>
+
+<p>When <code>--security-enable-system-operator</code> is active, <code>--security-disable-env-ops</code> and <code>--security-disable-file-ops</code> become ineffective: <code>system("printenv"; "SECRET")</code> reads environment variables and <code>system("cat"; "/path/to/file")</code> reads arbitrary files. The documentation does not mention this.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/cmd/root.go#L213-L215">cmd/root.go</a></div>
+<pre class="language-go" data-start="213" data-line="213-215"><code>	rootCmd.PersistentFlags().BoolVarP(&amp;yqlib.ConfiguredSecurityPreferences.DisableEnvOps, "security-disable-env-ops", "", false, "Disable env related operations.")
+	rootCmd.PersistentFlags().BoolVarP(&amp;yqlib.ConfiguredSecurityPreferences.DisableFileOps, "security-disable-file-ops", "", false, "Disable file related operations (e.g. load)")
+	rootCmd.PersistentFlags().BoolVarP(&amp;yqlib.ConfiguredSecurityPreferences.EnableSystemOps, "security-enable-system-operator", "", false, "Enable system operator to allow execution of external commands.")</code></pre>
+
+<p><span class="fix-label">Fix:</span> Add a note to <code>headers/system-operators.md</code>:</p>
+
+<pre class="language-diff"><code> **Security warning**: The system operator is disabled by default. You must explicitly pass `--security-enable-system-operator` to use it.
++
++**Note:** When enabled, the system operator can replicate the functionality of `env` and `load`
++operators via external commands. Enabling it effectively overrides `--security-disable-env-ops`
++and `--security-disable-file-ops`.</code></pre>
+</div>
+
+<!-- I7 -->
+<div class="card card-important">
+<div class="finding-title" id="I7"><span class="finding-num">I7.</span> Multi-node execution path untested (important, gap) <span class="pill pill-claude">Claude</span> (pass 2) <a class="pilcrow" href="#I7">¶</a></div>
+
+<p>All 7 test scenarios exercise the per-node loop (<a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L79-L145"><code>operator_system.go:79-145</code></a>) with exactly one matched node. Result accumulation across iterations, per-node context isolation, and failure-on-Nth-node behaviour are untested.</p>
+
+<p><span class="fix-label">Fix:</span> Add a multi-document or multi-element test:</p>
+
+<pre class="language-go"><code>{
+    description: "System operator processes multiple documents",
+    skipDoc:     true,
+    document:    "a: first",
+    document2:   "a: second",
+    expression:  `.a = system("` + echoPath + `"; "replaced")`,
+    expected: []string{
+        "D0, P[], (!!map)::a: replaced\n",
+        "D1, P[], (!!map)::a: replaced\n",
+    },
+},</code></pre>
+</div>
+
+<!-- I8 -->
+<div class="card card-important">
+<div class="finding-title" id="I8"><span class="finding-num">I8.</span> <code>os/exec</code> import has no build-tag exclusion for tinygo (important, gap) <span class="pill pill-claude">Claude</span> (pass 3) <a class="pilcrow" href="#I8">¶</a></div>
+
+<p>The system operator is the only file in <code>pkg/yqlib</code> that imports <code>os/exec</code>. Every other heavy dependency (JSON, XML, TOML, Lua, HCL, etc.) has a corresponding <code>no_*.go</code> stub and build tag for tinygo builds. The system operator lacks this mechanism.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L1-L9">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="1" data-line="7"><code>package yqlib
+
+import (
+	"bytes"
+	"container/list"
+	"fmt"
+	"os/exec"
+	"strings"
+)</code></pre>
+
+<p><span class="fix-label">Fix:</span> Add a <code>yq_nosystem</code> build tag. Create <code>no_system.go</code> with a stub that returns an error, gate <code>operator_system.go</code> with <code>//go:build !yq_nosystem</code>, and update <code>scripts/build-tinygo-yq.sh</code> to include <code>yq_nosystem</code>.</p>
+</div>
+
+<hr>
+
+<h2 id="suggestions" class="section-suggestion">Suggestions <a class="pilcrow" href="#suggestions">¶</a></h2>
+
+<!-- S1 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S1"><span class="finding-num">S1.</span> No test verifying stdin piping (suggestion, gap) <span class="pill pill-claude">Claude</span> <a class="pilcrow" href="#S1">¶</a></div>
+<p>The documentation states "The current matched node's value is serialised and piped to the command via stdin" but no test verifies this. A test using <code>cat</code> (which echoes stdin) would confirm the YAML encoding is correctly piped.</p>
+</div>
+
+<!-- S2 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S2"><span class="finding-num">S2.</span> No test for <code>--null-input</code> usage (suggestion, gap) <span class="pill pill-claude">Claude</span> <a class="pilcrow" href="#S2">¶</a></div>
+<p>The documentation header shows <code>--null-input</code> as a primary usage pattern, but all test scenarios provide a <code>document</code>. A null-input scenario would verify the operator handles a null scalar node on stdin.</p>
+</div>
+
+<!-- S3 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S3"><span class="finding-num">S3.</span> Misleading "parse time" comment (suggestion, regression) <span class="pill pill-claude">Claude</span> <a class="pilcrow" href="#S3">¶</a></div>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L74-L75">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="74" data-line="74"><code>	// determine at parse time whether we have (command; args) or just (command)
+	hasArgs := expressionNode.RHS.Operation.OperationType == blockOpType</code></pre>
+
+<p>This runs during expression <strong>evaluation</strong>, not at parse time. Fix: remove "at parse time".</p>
+</div>
+
+<!-- S4 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S4"><span class="finding-num">S4.</span> CLI security flag not exercised by tests (suggestion, gap) <span class="pill pill-codex">Codex</span> <a class="pilcrow" href="#S4">¶</a></div>
+
+<p>Tests toggle <code>ConfiguredSecurityPreferences.EnableSystemOps</code> directly instead of testing the Cobra flag wiring at <a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/cmd/root.go#L215"><code>cmd/root.go:215</code></a>. The test suite would still pass if the flag were renamed or unregistered.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system_test.go#L29-L41">pkg/yqlib/operator_system_test.go</a></div>
+<pre class="language-go" data-start="29" data-line="30-36"><code>func TestSystemOperatorDisabledScenarios(t *testing.T) {
+	originalEnableSystemOps := ConfiguredSecurityPreferences.EnableSystemOps
+	defer func() {
+		ConfiguredSecurityPreferences.EnableSystemOps = originalEnableSystemOps
+	}()
+
+	ConfiguredSecurityPreferences.EnableSystemOps = false
+
+	for _, tt := range systemOperatorDisabledScenarios {
+		testScenario(t, &amp;tt)
+	}
+	documentOperatorScenarios(t, "system-operators", systemOperatorDisabledScenarios)
+}</code></pre>
+</div>
+
+<!-- S5 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S5"><span class="finding-num">S5.</span> Test doc generation uses host-specific absolute paths (suggestion, regression) <span class="pill pill-gemini">Gemini</span> <a class="pilcrow" href="#S5">¶</a></div>
+
+<p><code>findExec</code> embeds machine-specific paths (e.g. <code>/usr/bin/echo</code> vs <code>/bin/echo</code>) into generated docs. Running <code>make generate-docs</code> on a different host produces a diff.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system_test.go#L43-L60">pkg/yqlib/operator_system_test.go</a></div>
+<pre class="language-go" data-start="43" data-line="44-45"><code>func TestSystemOperatorEnabledScenarios(t *testing.T) {
+	echoPath := findExec(t, "echo")
+	falsePath := findExec(t, "false")
+
+	originalEnableSystemOps := ConfiguredSecurityPreferences.EnableSystemOps
+	defer func() {
+		ConfiguredSecurityPreferences.EnableSystemOps = originalEnableSystemOps
+	}()
+
+	ConfiguredSecurityPreferences.EnableSystemOps = true
+
+	scenarios := []expressionScenario{
+		{
+			description:    "Run a command with an argument",
+			subdescription: "Use `--security-enable-system-operator` to enable the system operator.",
+			yqFlags:        "--security-enable-system-operator",
+			document:       "country: Australia",</code></pre>
+</div>
+
+<!-- S6 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S6"><span class="finding-num">S6.</span> Command stderr discarded on success (suggestion, gap) <span class="pill pill-gemini">Gemini</span> <a class="pilcrow" href="#S6">¶</a></div>
+
+<p>The stderr buffer is checked only when <code>cmd.Output()</code> returns an error. Commands that succeed with warnings on stderr have those warnings silently discarded.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L125-L135">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="125" data-line="129-134"><code>		cmd.Stderr = &amp;stderr
+
+		output, err := cmd.Output()
+		if err != nil {
+			stderrStr := strings.TrimSpace(stderr.String())
+			if stderrStr != "" {
+				return Context{}, fmt.Errorf("system command '%v' failed: %w\nstderr: %v", command, err, stderrStr)
+			}
+			return Context{}, fmt.Errorf("system command '%v' failed: %w", command, err)
+		}</code></pre>
+</div>
+
+<!-- S7 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S7"><span class="finding-num">S7.</span> Embedded newline in error value (suggestion, regression) <span class="pill pill-claude">Claude</span> (pass 2) <a class="pilcrow" href="#S7">¶</a></div>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L131-L132">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="131" data-line="132"><code>			if stderrStr != "" {
+				return Context{}, fmt.Errorf("system command '%v' failed: %w\nstderr: %v", command, err, stderrStr)
+			}</code></pre>
+
+<p>Go errors are conventionally single-line. No other <code>fmt.Errorf</code> in <code>pkg/yqlib/</code> embeds a newline. Fix: use a semicolon or parenthetical.</p>
+</div>
+
+<!-- S8 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S8"><span class="finding-num">S8.</span> No subprocess timeout (suggestion, enhancement) <span class="pill pill-claude">Claude</span> <a class="pilcrow" href="#S8">¶</a></div>
+
+<p>A hanging command blocks yq indefinitely. Using <code>exec.CommandContext</code> with a timeout would prevent this. Low priority — matches standard CLI tool conventions.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L122-L128">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="122" data-line="123-124"><code>		// #nosec G204 - intentional: user must explicitly enable this operator
+		cmd := exec.Command(command, args...)
+		cmd.Stdin = &amp;stdin
+		var stderr bytes.Buffer
+		cmd.Stderr = &amp;stderr
+
+		output, err := cmd.Output()</code></pre>
+</div>
+
+<!-- S9 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S9"><span class="finding-num">S9.</span> Unnecessary double memory allocation for stdin (suggestion, enhancement) <span class="pill pill-gemini">Gemini</span> (pass 2) <a class="pilcrow" href="#S9">¶</a></div>
+
+<p><code>encodeToYamlString</code> allocates a string; <code>stdin.WriteString(encoded)</code> copies it into a <code>bytes.Buffer</code>. Use <code>strings.NewReader(encoded)</code> instead to avoid the extra allocation.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L115-L121">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="115" data-line="115-121"><code>		var stdin bytes.Buffer
+		encoded, err := encodeToYamlString(candidate)
+		if err != nil {
+			return Context{}, err
+		}
+		stdin.WriteString(encoded)
+</code></pre>
+</div>
+
+<!-- S10 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S10"><span class="finding-num">S10.</span> Doc generation depends on test execution order (suggestion, gap) <span class="pill pill-claude">Claude</span> (pass 2) <a class="pilcrow" href="#S10">¶</a></div>
+
+<p><code>TestSystemOperatorDisabledScenarios</code> must run before <code>TestSystemOperatorEnabledScenarios</code> because the first creates the doc file (via <code>os.Create</code>) and the second only appends. This implicit ordering dependency is fragile but matches existing patterns in <a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_load_test.go"><code>operator_load_test.go</code></a>.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system_test.go#L40-L41">pkg/yqlib/operator_system_test.go</a></div>
+<pre class="language-go" data-start="40" data-line="40"><code>	documentOperatorScenarios(t, "system-operators", systemOperatorDisabledScenarios)</code></pre>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system_test.go#L113"><code>pkg/yqlib/operator_system_test.go</code></a></div>
+<pre class="language-go" data-start="113" data-line="113"><code>	appendOperatorDocumentScenario(t, "system-operators", scenarios)</code></pre>
+</div>
+
+<!-- S11 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S11"><span class="finding-num">S11.</span> Multiple semicolons produce a confusing error (suggestion, regression) <span class="pill pill-claude">Claude</span> (pass 3) <a class="pilcrow" href="#S11">¶</a></div>
+
+<p><code>system("cmd"; "arg1"; "arg2")</code> creates nested BLOCK nodes. The operator evaluates the inner BLOCK, gets an empty context, and reports "command expression returned no results" — a confusing error for what is really a syntax mistake. A check for nested blocks could produce a targeted error message.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L86-L96">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="86" data-line="86-88"><code>		if hasArgs {
+			block := expressionNode.RHS
+			commandNodes, err := d.GetMatchingNodes(nodeContext, block.LHS)
+			if err != nil {
+				return Context{}, err
+			}
+			command, err = resolveCommandNode(commandNodes)
+			if err != nil {
+				return Context{}, err
+			}
+
+			argsNodes, err := d.GetMatchingNodes(nodeContext, block.RHS)</code></pre>
+</div>
+
+<!-- S12 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S12"><span class="finding-num">S12.</span> <code>flagsPrefix</code> logic duplicated in <code>documentInput</code> (suggestion, regression) <span class="pill pill-claude">Claude</span> (pass 3) <a class="pilcrow" href="#S12">¶</a></div>
+
+<p>The same 3-line pattern for building <code>flagsPrefix</code> appears in both branches of <code>documentInput</code>. Hoist above the if/else.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operators_test.go#L360-L374">pkg/yqlib/operators_test.go</a></div>
+<pre class="language-go" data-start="360" data-line="361-362,371-372"><code>		writeOrPanic(w, "then\n")
+
+		flagsPrefix := ""
+		if s.yqFlags != "" {
+			flagsPrefix = s.yqFlags + " "
+		}
+		if s.expression != "" {
+			writeOrPanic(w, fmt.Sprintf("```bash\n%vyq %v%v'%v' %v\n```\n", envCommand, flagsPrefix, command, strings.ReplaceAll(s.expression, "'", `'\''`), files))
+		} else {
+			writeOrPanic(w, fmt.Sprintf("```bash\n%vyq %v%v%v\n```\n", envCommand, flagsPrefix, command, files))
+		}
+	} else {
+		writeOrPanic(w, "Running\n")
+		flagsPrefix := ""
+		if s.yqFlags != "" {
+			flagsPrefix = s.yqFlags + " "
+		}</code></pre>
+</div>
+
+<!-- S13 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S13"><span class="finding-num">S13.</span> Flag suffix inconsistent with existing security flags (suggestion, regression) <span class="pill pill-claude">Claude</span> (pass 4) <a class="pilcrow" href="#S13">¶</a></div>
+
+<p>Existing flags use plural abbreviated suffixes: <code>--security-disable-env-ops</code>, <code>--security-disable-file-ops</code>. The new flag uses singular spelled-out <code>--security-enable-system-operator</code>. The Go field <code>EnableSystemOps</code> already follows the <code>*Ops</code> convention. Consider renaming to <code>--security-enable-system-ops</code> for consistency.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/cmd/root.go#L213-L215">cmd/root.go</a></div>
+<pre class="language-go" data-start="213" data-line="215"><code>	rootCmd.PersistentFlags().BoolVarP(&amp;yqlib.ConfiguredSecurityPreferences.DisableEnvOps, "security-disable-env-ops", "", false, "Disable env related operations.")
+	rootCmd.PersistentFlags().BoolVarP(&amp;yqlib.ConfiguredSecurityPreferences.DisableFileOps, "security-disable-file-ops", "", false, "Disable file related operations (e.g. load)")
+	rootCmd.PersistentFlags().BoolVarP(&amp;yqlib.ConfiguredSecurityPreferences.EnableSystemOps, "security-enable-system-operator", "", false, "Enable system operator to allow execution of external commands.")</code></pre>
+</div>
+
+<!-- S14 -->
+<div class="card card-suggestion">
+<div class="finding-title" id="S14"><span class="finding-num">S14.</span> YAML encoding error returned without operator context (suggestion, regression) <span class="pill pill-claude">Claude</span> (pass 4) <a class="pilcrow" href="#S14">¶</a></div>
+
+<p>Every other error path in <code>systemOperator</code> prefixes with <code>"system operator:"</code> or <code>"system command '...' failed:"</code>. An encoding error here propagates without context. Fix: wrap with <code>fmt.Errorf("system operator: failed to encode input: %w", err)</code>.</p>
+
+<div class="code-file-header"><a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L116-L119">pkg/yqlib/operator_system.go</a></div>
+<pre class="language-go" data-start="116" data-line="117-118"><code>		encoded, err := encodeToYamlString(candidate)
+		if err != nil {
+			return Context{}, err
+		}</code></pre>
+</div>
+
+<hr>
+
+<h2 id="design-observations" class="section-design">Design Observations <a class="pilcrow" href="#design-observations">¶</a></h2>
+
+<h3 id="design-concerns">Concerns <a class="pilcrow" href="#design-concerns">¶</a></h3>
+
+<div class="card card-design">
+<ul>
+<li><strong>(in-scope)</strong> The inverted security model (enable vs. disable) is sound, but the inverted failure mode (null vs. error) breaks the principle of least surprise. Users who learn that <code>--security-disable-env-ops</code> causes errors will expect that the absence of <code>--security-enable-system-operator</code> also causes errors. <span class="pill pill-claude">Claude</span></li>
+<li><strong>(in-scope)</strong> The security model has an implicit hierarchy: <code>system</code> &gt;= <code>env</code> + <code>load</code>. The flags are presented as independent toggles, but enabling system ops effectively grants everything the other two provide. This should be explicit to users. <span class="pill pill-claude">Claude</span> (pass 2)</li>
+<li><strong>(future)</strong> The operator returns <code>!!str</code> for all output. A future enhancement could support <code>system_yaml</code>/<code>system_json</code> variants that parse command output, similar to <code>load</code> vs <code>load_str</code>. <span class="pill pill-claude">Claude</span> (pass 2)</li>
+</ul>
+</div>
+
+<h3 id="design-strengths">Strengths <a class="pilcrow" href="#design-strengths">¶</a></h3>
+
+<div class="card card-design">
+<ul>
+<li><strong>(in-scope)</strong> Using <code>exec.Command</code> (no shell) avoids shell injection entirely. Arguments pass directly to the exec syscall. <span class="pill pill-claude">Claude</span> <span class="pill pill-gemini">Gemini</span></li>
+<li><strong>(in-scope)</strong> Per-node evaluation via <code>SingleReadonlyChildContext</code> correctly scopes expression evaluation, matching the pattern used by <code>loadStringOperator</code> and other operators. <span class="pill pill-claude">Claude</span> <span class="pill pill-codex">Codex</span></li>
+<li><strong>(in-scope)</strong> The inverted default (<code>EnableSystemOps: false</code>) correctly makes the more dangerous capability opt-in rather than opt-out. <span class="pill pill-claude">Claude</span> <span class="pill pill-gemini">Gemini</span></li>
+<li><strong>(in-scope)</strong> The <code>#nosec G204</code> annotation at line 122 with explanation properly acknowledges the gosec warning and documents the mitigation. <span class="pill pill-claude">Claude</span></li>
+<li><strong>(in-scope)</strong> The <code>yqFlags</code> field added to <code>expressionScenario</code> is a clean, reusable solution for doc generation — any operator needing CLI flags in examples can use it. <span class="pill pill-claude">Claude</span> <span class="pill pill-codex">Codex</span></li>
+<li><strong>(in-scope)</strong> The <code>blockOpType</code> check for optional arguments follows the pattern used by <code>match</code>, <code>datetime</code>, and <code>with</code> operators. <span class="pill pill-claude">Claude</span> (pass 3)</li>
+<li><strong>(in-scope)</strong> <code>.system</code> (dot-prefixed) is correctly tokenized as a <code>PathElement</code>, not as the SYSTEM operator, so users with YAML keys named "system" are unaffected. <span class="pill pill-claude">Claude</span> (pass 3)</li>
+</ul>
+</div>
+
+<hr>
+
+<h2 id="testing-assessment">Testing Assessment <a class="pilcrow" href="#testing-assessment">¶</a></h2>
+
+<div class="card card-neutral">
+<p>Test coverage is adequate for the core paths: disabled mode, single-arg, no-arg, array args, per-node expression evaluation, command failure, and null command. The highest-risk untested scenarios:</p>
+<ol>
+<li><strong>Multi-node execution</strong> (I7) — the core for-loop is never tested with &gt;1 node</li>
+<li><strong>Stdin piping</strong> (S1) — the core feature of passing node YAML to the command's stdin</li>
+<li><strong><code>--null-input</code> mode</strong> (S2) — documented primary usage pattern</li>
+<li><strong>CLI flag wiring</strong> (S4) — Cobra flag binding is untested</li>
+<li><strong>Non-string command scalars</strong> (I3) — <code>system(123)</code> reaches <code>exec.Command</code> unchecked</li>
+</ol>
+</div>
+
+<hr>
+
+<h2 id="documentation-assessment">Documentation Assessment <a class="pilcrow" href="#documentation-assessment">¶</a></h2>
+
+<div class="card card-neutral">
+<p>The header documentation uses correct UK English ("serialised") and clearly warns about the security gate. The generated examples correctly show the flag for enabled scenarios and omit it for disabled. Two gaps:</p>
+<ul>
+<li>The semicolon description at <a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/doc/operators/headers/system-operators.md#L15"><code>headers/system-operators.md:15</code></a> is misleading (I4)</li>
+<li>The security subsumption relationship with env/file ops is undocumented (I6)</li>
+</ul>
+</div>
+
+<hr>
+
+<h2 id="commit-structure">Commit Structure <a class="pilcrow" href="#commit-structure">¶</a></h2>
+
+<div class="card card-neutral">
+<p>The history shows iterative Copilot agent refinement: an initial plan commit (<a href="https://github.com/mikefarah/yq/commit/d181cf87"><code>d181cf87</code></a>, empty), the main implementation, then multiple fixup commits responding to review feedback. Several commits are patches on earlier ones:</p>
+<ul>
+<li><a href="https://github.com/mikefarah/yq/commit/6315cfe9"><code>6315cfe9</code></a>, <a href="https://github.com/mikefarah/yq/commit/5ea069a5"><code>5ea069a5</code></a>, <a href="https://github.com/mikefarah/yq/commit/2c8605f6"><code>2c8605f6</code></a> — filename-only messages with no indication of what changed</li>
+<li><a href="https://github.com/mikefarah/yq/commit/e10e8127"><code>e10e8127</code></a>, <a href="https://github.com/mikefarah/yq/commit/6f94991c"><code>6f94991c</code></a> — "Apply suggestions from code review" without specifics</li>
+<li><a href="https://github.com/mikefarah/yq/commit/d181cf87"><code>d181cf87</code></a> — empty plan commit</li>
+</ul>
+<p>This is expected for a Copilot-authored PR iterated via review comments. A squash merge would produce a clean single commit.</p>
+</div>
+
+<hr>
+
+<h2 id="acknowledged-limitations">Acknowledged Limitations <a class="pilcrow" href="#acknowledged-limitations">¶</a></h2>
+
+<div class="card card-neutral">
+<ul>
+<li><code>#nosec G204</code> at <a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L122"><code>operator_system.go:122</code></a> — intentional use of variable command paths for <code>exec.Command</code>, gated by explicit opt-in via <code>--security-enable-system-operator</code>.</li>
+</ul>
+</div>
+
+<hr>
+
+<h2 id="unresolved-feedback">Unresolved Feedback <a class="pilcrow" href="#unresolved-feedback">¶</a></h2>
+
+<div class="card card-neutral">
+<p>All four substantive review comments from @mikefarah have been addressed by subsequent commits:</p>
+<ol>
+<li>Per-node evaluation with <code>SingleReadonlyChildContext</code> — commit <a href="https://github.com/mikefarah/yq/commit/da611f7a"><code>da611f7a</code></a></li>
+<li>Missing <code>--security-enable-system-operator</code> in doc examples — commit <a href="https://github.com/mikefarah/yq/commit/884c2d8b"><code>884c2d8b</code></a></li>
+<li>Validate command node type, debug log for multiple results — commit <a href="https://github.com/mikefarah/yq/commit/53abbbae"><code>53abbbae</code></a></li>
+<li>Remove deprecated <code>--enable-system-operator</code> alias — commit <a href="https://github.com/mikefarah/yq/commit/b3b44788"><code>b3b44788</code></a></li>
+</ol>
+<p>However, the arg side of review comment 3 remains partially unaddressed: the request was to "use the first (and log a debug, not a warning, of all the matches)." The command side logs extra results at debug level (<a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L50-L52"><code>operator_system.go:50-52</code></a>), but the arg side still truncates silently (<a href="https://github.com/mikefarah/yq/blob/6f94991c2ab9a1022073afc6e4978096ee89e860/pkg/yqlib/operator_system.go#L101-L103"><code>operator_system.go:101-103</code></a>). See I2.</p>
+<p>URL: <a href="https://github.com/mikefarah/yq/pull/2640#discussion_r3004049491">https://github.com/mikefarah/yq/pull/2640#discussion_r3004049491</a></p>
+</div>
+
+<hr>
+
+<h2 id="agent-performance-retro">Agent Performance Retro <a class="pilcrow" href="#agent-performance-retro">¶</a></h2>
+
+<h3 id="retro-claude"><span class="pill pill-claude">Claude</span> Opus 4.6 <a class="pilcrow" href="#retro-claude">¶</a></h3>
+
+<div class="card card-neutral">
+<p><strong>Pass 1</strong> (604s, 43 tool calls): Produced 1 important and 5 suggestions. Read 19 files and ran 15 grep searches. Used <code>git blame</code> (2 calls) to verify findings. The strongest unique contribution was I1 (disabled mode returns null), which Claude traced through <code>operator_env.go</code> and <code>operator_load.go</code> to demonstrate the inconsistency. Also identified 4 testing gaps (S1-S4) that no other agent found.</p>
+
+<p><strong>Pass 2</strong> (648s, 38 tool calls): Found the security subsumption issue (I6) — a cross-cutting concern requiring understanding of how <code>exec.Command</code> subsumes env/file operations. Also identified the multi-node test gap (I7) and the embedded-newline convention issue (S7). Used <code>git blame</code> 4 times to verify findings.</p>
+
+<p><strong>Pass 3</strong> (804s, 53 tool calls): Identified the tinygo build-tag gap (I8) by checking all <code>no_*.go</code> stubs and <code>build-tinygo-yq.sh</code>. This required 30 grep searches and 20 file reads — the most thorough exploration of any pass. Also found the multiple-semicolons UX issue (S11), the duplicated flagsPrefix code (S12), and the eval+system composition gap (S20). Used <code>git blame</code> 10 times.</p>
+
+<p><strong>Pass 4</strong> (757s, 54 tool calls): Found the flag naming inconsistency (S13) by comparing all <code>--security-*</code> flags, and two error-handling suggestions (S14, S22). 30 grep searches, 0 important findings — diminishing returns as expected for the final pass.</p>
+
+<p><strong>Coverage misses</strong>: None. Claude reviewed all 9 files in every pass.</p>
+</div>
+
+<h3 id="retro-codex"><span class="pill pill-codex">Codex</span> GPT 5.4 <a class="pilcrow" href="#retro-codex">¶</a></h3>
+
+<div class="card card-neutral">
+<p><strong>Pass 1</strong> (249s, 45 tool calls): Produced 2 important and 1 suggestion. Codex was the only agent to identify the non-string scalar validation gap (I3), tracing through YAML tag handling. It also independently found the arg truncation issue (I2) and the CLI flag test gap (S4). Used <code>git blame</code> 6 times — the most of any agent in pass 1. Ran <code>go test</code> (6 calls) to verify the test suite passes.</p>
+
+<p><strong>Pass 2</strong> (200s, 46 tool calls): Found no new issues beyond the 13 already known. Thorough investigation (23 <code>sed -n</code> for targeted line reads, 11 <code>rg</code> searches, 3 <code>git blame</code>) but the review was exhausted. Dropped after this pass.</p>
+
+<p><strong>Coverage misses</strong>: None. Codex reviewed all 9 files.</p>
+</div>
+
+<h3 id="retro-gemini"><span class="pill pill-gemini">Gemini</span> 3.1 Pro <a class="pilcrow" href="#retro-gemini">¶</a></h3>
+
+<div class="card card-neutral">
+<p><strong>Pass 1</strong> (394s, 26 tool calls): Most productive initial pass with 5 important and 2 suggestions. Unique contributions: the misleading docs finding (I4) — an insight requiring understanding of yq's block operator semantics — and the invalid arg type issue (I5). Also independently found I1 (disabled returns null) and S6 (stderr discarded on success). Notably ran <code>./yq</code> 10 times for live verification, the only agent to do so.</p>
+
+<p><strong>Pass 2</strong> (350s, 27 tool calls): Found 3 new issues (double allocation S9, stdout discarded on failure, missing command abort handling). Ran <code>go test</code> 13 times for verification. However, Gemini's I3 (missing command aborts evaluation) is a design choice, not a bug — erroring on a missing command is the safer default.</p>
+
+<p><strong>Pass 3</strong> (301s, 0 useful output): Hit Gemini Pro quota exhaustion (<code>TerminalQuotaError: QUOTA_EXHAUSTED</code>). Dropped.</p>
+
+<p><strong>Coverage misses</strong>: In pass 1, did not run <code>git blame</code> (expected — known Gemini quota limitation). This means Gemini cannot distinguish regressions from pre-existing issues. In this PR all changed files are new, so the distinction is moot.</p>
+</div>
+
+<div class="card card-neutral">
+<p><strong>Tool call highlights:</strong></p>
+<ul>
+<li><strong><code>git blame</code> usage</strong>: Claude used blame in every pass (2, 4, 10, 2 = 18 total). Codex used it in passes 1-2 (6, 3 = 9 total). Gemini never used blame — a known quota trade-off.</li>
+<li><strong>Live verification</strong>: Gemini was the only agent to run <code>./yq</code> directly (10 times in pass 1), testing operator behaviour against the actual binary rather than relying solely on code reading.</li>
+<li><strong>Test execution</strong>: Codex ran <code>go test</code> 6 times in pass 1; Gemini ran it 13 times in pass 2. Claude never ran tests, relying on code analysis.</li>
+</ul>
+</div>
+
+<h3 id="retro-summary">Summary <a class="pilcrow" href="#retro-summary">¶</a></h3>
+
+<table class="retro-table">
+<tr><th></th><th><span class="pill pill-claude">Claude</span> Opus 4.6</th><th><span class="pill pill-codex">Codex</span> GPT 5.4</th><th><span class="pill pill-gemini">Gemini</span> 3.1 Pro</th></tr>
+<tr><td>Duration (pass 1)</td><td>604s</td><td>249s</td><td>394s</td></tr>
+<tr><td>Findings (pass 1)</td><td>1I 5S</td><td>2I 1S</td><td>5I 2S</td></tr>
+<tr><td>Tool calls (pass 1)</td><td>43 (Read 19, Grep 15)</td><td>45 (exec 43)</td><td>26 (shell 15, grep 9)</td></tr>
+<tr><td>Duration (pass 2)</td><td>648s</td><td>200s</td><td>350s</td></tr>
+<tr><td>Findings (pass 2)</td><td>2I 3S</td><td>0</td><td>3I 2S</td></tr>
+<tr><td>Tool calls (pass 2)</td><td>38 (Read 15, Grep 10)</td><td>46 (exec 44)</td><td>27 (shell 19, grep 6)</td></tr>
+<tr><td>Duration (pass 3)</td><td>804s</td><td>—</td><td>301s (empty)</td></tr>
+<tr><td>Findings (pass 3)</td><td>1I 4S</td><td>—</td><td>0 (quota)</td></tr>
+<tr><td>Tool calls (pass 3)</td><td>53 (Grep 30, Read 20)</td><td>—</td><td>—</td></tr>
+<tr><td>Duration (pass 4)</td><td>757s</td><td>—</td><td>—</td></tr>
+<tr><td>Findings (pass 4)</td><td>0I 3S</td><td>—</td><td>—</td></tr>
+<tr><td>Tool calls (pass 4)</td><td>54 (Grep 30, Read 22)</td><td>—</td><td>—</td></tr>
+<tr><td><strong>Totals</strong></td><td><strong>4I 15S</strong></td><td><strong>2I 1S</strong></td><td><strong>5I 2S</strong> + empty</td></tr>
+<tr><td>False positives</td><td>0</td><td>0</td><td>1 (I3 pass 2: design choice)</td></tr>
+<tr><td>Downgraded</td><td>0</td><td>0</td><td>3 (I1→S9, I2→informational, I3→informational)</td></tr>
+<tr><td>Unique insights</td><td>I1, I6, I7, I8, S3, S7-S14</td><td>I3, I2</td><td>I4, I5, S5, S6</td></tr>
+<tr><td>Coverage misses</td><td>0</td><td>0</td><td>0</td></tr>
+</table>
+
+<div class="card card-neutral" style="margin-top: 1.2rem;">
+<p><strong>Reconciliation:</strong></p>
+<ul>
+<li>Gemini P1 I5 (stderr on success) → S6 (suggestion; standard CLI behaviour)</li>
+<li>Gemini P2 I1 (double allocation) → S9 (suggestion; marginal performance impact)</li>
+<li>Gemini P2 I2 (stdout on failure) → informational (merged into existing S7 context)</li>
+<li>Gemini P2 I3 (missing command aborts) → informational (erroring is the correct defensive behaviour)</li>
+<li>Claude P1 S1 (arg truncation) → promoted to I2 (important; Codex's severity assessment was more accurate)</li>
+</ul>
+
+<p>All three agents contributed distinct value. Gemini excelled in pass 1 with the highest finding count and unique documentation insight (I4). Codex was the fastest and most precise, finding the non-string validation gap (I3) that required deep YAML tag knowledge. Claude was the most persistent across all 4 passes and found the cross-cutting issues (I6 security subsumption, I8 tinygo build tag) that required broad codebase exploration.</p>
+</div>
+
+<hr>
+
+<h2 id="review-process-notes">Review Process Notes <a class="pilcrow" href="#review-process-notes">¶</a></h2>
+
+<div class="card card-neutral">
+<p>No suggestions for this review — the prompt guided agents well, the findings were high quality, and no prompt gaps were identified.</p>
+</div>
+
+  </main>
+  <script>window.Prism = window.Prism || {}; Prism.manual = true;</script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-go.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-diff.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markdown.min.js"></script>
+  <script>
+/* Deep Review — Prism initialization and line-number wrapping.
+ * Inlined into each generated HTML file by the beautify-review skill.
+ * Runs synchronously at the end of <body> — no event listeners.
+ *
+ * Prerequisite: a preceding <script> must set Prism.manual = true
+ * before the Prism core <script> loads.
+ */
+
+Prism.highlightAll();
+
+document.querySelectorAll('pre[data-start]').forEach(function(pre) {
+  var startLine = parseInt(pre.getAttribute('data-start'), 10) || 1;
+  var hlAttr = pre.getAttribute('data-line') || '';
+
+  /* Parse data-line into a Set of line numbers to highlight.
+   * Accepts comma-separated values: "75,76,77" or ranges: "75-84". */
+  var hlLines = new Set();
+  hlAttr.split(',').forEach(function(part) {
+    part = part.trim();
+    if (!part) return;
+    var m = part.match(/^(\d+)-(\d+)$/);
+    if (m) {
+      for (var i = parseInt(m[1], 10); i <= parseInt(m[2], 10); i++) hlLines.add(i);
+    } else {
+      hlLines.add(parseInt(part, 10));
+    }
+  });
+
+  var code = pre.querySelector('code');
+  if (!code) return;
+
+  var html = code.innerHTML;
+  var lines = html.split('\n');
+  /* Strip a trailing empty line that Prism sometimes leaves. */
+  if (lines.length > 0 && lines[lines.length - 1].trim() === '') lines.pop();
+
+  var wrapped = lines.map(function(line, idx) {
+    var lineNum = startLine + idx;
+    var cls = 'code-line' + (hlLines.has(lineNum) ? ' line-hl' : '');
+    return '<span class="' + cls + '">' + line + '</span>';
+  });
+
+  /* Join with '' (empty string) — NOT '\n'.
+   * Inside <pre>, newlines are literal whitespace. Since .code-line uses
+   * display: block, joining with '\n' produces double line spacing. */
+  code.innerHTML = wrapped.join('');
+  pre.style.counterReset = 'line ' + (startLine - 1);
+});
+
+/* GitHub reference tooltips — show title and state on hover for #N links.
+ * Links must have class="gh-ref" and data-title set by the generator. */
+document.querySelectorAll('a.gh-ref[data-title]').forEach(function(link) {
+  var tip = null;
+
+  link.addEventListener('mouseenter', function() {
+    if (tip) return;
+    tip = document.createElement('div');
+    tip.className = 'gh-tooltip';
+
+    var state = link.getAttribute('data-state') || '';
+    var type = link.getAttribute('data-type') || 'issue';
+    var label = state.charAt(0).toUpperCase() + state.slice(1).toLowerCase();
+
+    var pill = document.createElement('span');
+    pill.className = 'gh-tooltip-state gh-state-' + state;
+    pill.textContent = label + (type === 'pr' ? ' PR' : '');
+
+    var title = document.createElement('span');
+    title.className = 'gh-tooltip-title';
+    title.textContent = link.getAttribute('data-title');
+
+    tip.appendChild(pill);
+    tip.appendChild(title);
+    document.body.appendChild(tip);
+
+    var rect = link.getBoundingClientRect();
+    var tw = tip.offsetWidth;
+    var th = tip.offsetHeight;
+    var left = rect.left + window.scrollX;
+    var top = rect.top + window.scrollY - th - 8;
+
+    if (left + tw > window.innerWidth - 12) left = window.innerWidth - tw - 12;
+    if (left < 4) left = 4;
+    if (top < window.scrollY + 4) top = rect.bottom + window.scrollY + 8;
+
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+    tip.style.opacity = '1';
+  });
+
+  link.addEventListener('mouseleave', function() {
+    if (tip) { tip.remove(); tip = null; }
+  });
+});
+  </script>
+</body>
+</html>
